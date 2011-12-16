@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
     "VERSION.yml",
     "lib/rest.rb",
     "lib/rest/client.rb",
+    "rest.gemspec",
     "test/test_base.rb",
     "test/test_rest.rb"
   ]
