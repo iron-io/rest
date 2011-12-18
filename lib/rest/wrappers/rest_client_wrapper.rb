@@ -27,14 +27,25 @@ module Rest
 
     class RestClientWrapper
 
+      def default_headers
+        {}
+      end
+
       def get(url, req_hash={})
         response = nil
         begin
           req_hash[:method] = :get
           req_hash[:url] = url
+          req_hash[:headers] ||= default_headers
+          req_hash[:headers][:params] = req_hash[:params] if req_hash[:params]
+          #p req_hash
           r2 = RestClient::Request.execute(req_hash)
           response = RestClientResponseWrapper.new(r2)
         rescue RestClient::Exception => ex
+          #p ex
+          if ex.http_code == 404
+            return RestClientResponseWrapper.new(ex.response)
+          end
           raise RestClientExceptionWrapper.new(ex)
         end
         response

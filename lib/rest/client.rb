@@ -35,7 +35,7 @@ module Rest
     puts "Could not load typhoeus. #{ex.class.name}: #{ex.message}. Falling back to rest-client. Please install 'typhoeus' gem for best performance."
     require 'rest_client'
     Rest.gem = :rest_client
-    require_relative 'wrappers/typhoeus_wrapper'
+    require_relative 'wrappers/rest_client_wrapper'
   end
 
 
