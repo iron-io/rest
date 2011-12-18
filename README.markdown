@@ -17,22 +17,27 @@ Then use it.
 GET
 =========
 
-    @rest.get(full_url, options...)
+    @rest.get(url, options...)
 
 options:
 
-- params - query params for url
-- headers
+- :params => query params for url
+- :headers => headers
 
 POST
 ======
 
-    @rest.post(full_url, options...)
+    @rest.post(url, options...)
 
 options:
 
-- headers
-- body
+- :body => POST body
+- :headers => headers
+
+DELETE
+======
+
+    @rest.delete(url, options...)
 
 
 
