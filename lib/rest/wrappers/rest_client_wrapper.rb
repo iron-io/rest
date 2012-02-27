@@ -65,6 +65,20 @@ module Rest
         response
       end
 
+      def put(url, req_hash={})
+        response = nil
+        begin
+          req_hash[:method] = :put
+          req_hash[:url] = url
+          req_hash[:payload] = req_hash[:body] if req_hash[:body]
+          r2 = RestClient::Request.execute(req_hash)
+          response = RestClientResponseWrapper.new(r2)
+        rescue RestClient::Exception => ex
+          raise RestClientExceptionWrapper.new(ex)
+        end
+        response
+      end
+
       def delete(url, req_hash={})
         response = nil
         begin

@@ -70,6 +70,10 @@ module Rest
       @wrapper.post(url, req_hash)
     end
 
+    def put(url, req_hash={})
+      @wrapper.put(url, req_hash)
+    end
+
     def delete(url, req_hash={})
       @wrapper.delete(url, req_hash)
     end

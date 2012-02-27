@@ -46,6 +46,17 @@ module Rest
         response
       end
 
+      def put(url, req_hash={})
+        req_hash = default_typhoeus_options.merge(req_hash)
+        # puts "REQ_HASH=" + req_hash.inspect
+        response = Typhoeus::Request.put(url, req_hash)
+        #p response
+        if response.timed_out?
+          raise TyphoeusTimeoutError.new(response)
+        end
+        response
+      end
+
       def delete(url, req_hash={})
         req_hash = default_typhoeus_options.merge(req_hash)
         response = Typhoeus::Request.delete(url, req_hash)
