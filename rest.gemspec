@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rest"
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Reeder"]
-  s.date = "2012-02-27"
+  s.date = "2012-02-29"
   s.description = "Rest client wrapper that chooses best installed client."
   s.email = "travis@iron.io"
   s.extra_rdoc_files = [
