@@ -14,7 +14,9 @@ class TestTests < TestBase
 
   def test_basics
     response = @rest.get("http://www.github.com")
-    p response.body
+    assert response.code == 200
+    assert response.body
+    #p response.body
 
   end
 
