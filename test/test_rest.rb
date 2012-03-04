@@ -15,8 +15,8 @@ class TestTests < TestBase
   def test_basics
     response = @rest.get("http://www.github.com")
     assert response.code == 200
-    assert response.body
     #p response.body
+    assert response.body.include?("Social Coding")
 
   end
 
