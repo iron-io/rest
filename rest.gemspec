@@ -5,17 +5,19 @@
 
 Gem::Specification.new do |s|
   s.name = "rest"
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Reeder"]
-  s.date = "2012-03-05"
+  s.date = "2012-06-08"
   s.description = "Rest client wrapper that chooses best installed client."
   s.email = "travis@iron.io"
   s.extra_rdoc_files = [
+    "LICENSE",
     "README.markdown"
   ]
   s.files = [
+    "LICENSE",
     "README.markdown",
     "Rakefile",
     "VERSION.yml",
@@ -30,7 +32,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://www.iron.io"
   s.require_paths = ["lib"]
   s.required_ruby_version = Gem::Requirement.new(">= 1.9")
-  s.rubygems_version = "1.8.15"
+  s.rubygems_version = "1.8.24"
   s.summary = "Rest client wrapper that chooses best installed client."
 
   if s.respond_to? :specification_version then
