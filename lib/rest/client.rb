@@ -27,17 +27,16 @@ module Rest
     @gem
   end
 
-  begin
-    require 'typhoeus'
-    Rest.gem = :typhoeus
-    require_relative 'wrappers/typhoeus_wrapper'
-  rescue LoadError => ex
-    puts "Could not load typhoeus, falling back to rest-client. Please install 'typhoeus' gem for best performance."
+  #begin
+  #  require 'typhoeus'
+  #  Rest.gem = :typhoeus
+  #  require_relative 'wrappers/typhoeus_wrapper'
+  #rescue LoadError => ex
+  #  puts "Please install 'typhoeus' gem for best performance."
     require 'rest_client'
     Rest.gem = :rest_client
     require_relative 'wrappers/rest_client_wrapper'
-  end
-
+  #end
 
   class Client
 
