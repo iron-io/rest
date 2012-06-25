@@ -2,7 +2,8 @@ require 'json'
 require 'logger'
 
 # This is a simple wrapper that can use different http clients depending on what's installed.
-# The purpose of this is so that users who can't install binaries easily (like windoze users) can have fallbacks that work
+# The purpose of this is so that users who can't install binaries easily (like windoze users)
+# can have fallbacks that work.
 
 module Rest
 
@@ -18,6 +19,10 @@ module Rest
     end
   end
 
+  def self.puts(s)
+    Kernel.puts(s)
+  end
+
 
   def self.gem=(g)
     @gem = g
@@ -27,16 +32,17 @@ module Rest
     @gem
   end
 
-  #begin
-  #  require 'typhoeus'
-  #  Rest.gem = :typhoeus
-  #  require_relative 'wrappers/typhoeus_wrapper'
-  #rescue LoadError => ex
-  #  puts "Please install 'typhoeus' gem for best performance."
+  begin
+    require 'typhoeus'
+    Rest.gem = :typhoeus
+    Rest.puts "Using typhoeus gem."
+    require_relative 'wrappers/typhoeus_wrapper'
+  rescue LoadError => ex
+    Rest.puts "Please install 'typhoeus' gem for best performance."
     require 'rest_client'
     Rest.gem = :rest_client
     require_relative 'wrappers/rest_client_wrapper'
-  #end
+  end
 
   class Client
 
