@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rest (1.0.0)
+    rest (1.1.0)
       rest-client (>= 0.3.0)
 
 GEM
