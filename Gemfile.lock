@@ -7,18 +7,25 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    ffi (1.0.11)
     mime-types (1.18)
+    net-http-persistent (2.7)
     rake (0.9.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     test-unit (2.5.0)
+    typhoeus (0.4.2)
+      ffi (~> 1.0)
+      mime-types (~> 1.18)
     uber_config (0.0.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  net-http-persistent
   rake
   rest!
   test-unit
+  typhoeus
   uber_config

@@ -35,9 +35,17 @@ module Rest
         response
       end
 
+      # if body is a hash, it will convert it to json
+      def to_json_parts(h)
+        h[:body] = h[:body].to_json if h[:body] && h[:body].is_a?(Hash)
+      end
+
       def post(url, req_hash={})
         req_hash = default_typhoeus_options.merge(req_hash)
         # puts "REQ_HASH=" + req_hash.inspect
+
+        # Convert body to json - NEED TO TEST THIS MORE
+        to_json_parts(req_hash)
         response = Typhoeus::Request.post(url, req_hash)
         #p response
         if response.timed_out?

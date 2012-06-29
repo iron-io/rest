@@ -20,33 +20,12 @@ module Rest
   end
 
   def self.puts(s)
-    Kernel.puts(s)
-  end
-
-
-  def self.gem=(g)
-    @gem = g
-  end
-
-  def self.gem
-    @gem
-  end
-
-  begin
-    require 'typhoeus'
-    Rest.gem = :typhoeus
-    Rest.puts "Using typhoeus gem."
-    require_relative 'wrappers/typhoeus_wrapper'
-  rescue LoadError => ex
-    Rest.puts "Please install 'typhoeus' gem for best performance."
-    require 'rest_client'
-    Rest.gem = :rest_client
-    require_relative 'wrappers/rest_client_wrapper'
+    Kernel.puts("rest gem: #{s}")
   end
 
   class Client
 
-    attr_accessor :options
+    attr_accessor :options, :logger, :gem
     # options:
     # - :gem => specify gem explicitly
     #
@@ -55,14 +34,43 @@ module Rest
       @logger.level=Logger::INFO
       @options = options
 
-      Rest.gem = options[:gem] if options[:gem]
+      @gem = options[:gem] if options[:gem]
 
-      if Rest.gem == :typhoeus
-        @wrapper = Rest::Wrappers::TyphoeusWrapper.new
-      else
-        @wrapper = Rest::Wrappers::RestClientWrapper.new
+      if @gem.nil?
+        choose_best_gem()
       end
 
+      if @gem == :typhoeus
+        require_relative 'wrappers/typhoeus_wrapper'
+        @wrapper = Rest::Wrappers::TyphoeusWrapper.new
+        Rest.puts "Using typhoeus gem."
+      elsif @gem == :net_http_persistent
+        require_relative 'wrappers/net_http_persistent_wrapper'
+        @wrapper = Rest::Wrappers::NetHttpPersistentWrapper.new(self)
+        Rest.puts "Using net-http-persistent gem."
+      else
+        require_relative 'wrappers/rest_client_wrapper'
+        @wrapper = Rest::Wrappers::RestClientWrapper.new
+        Rest.puts "Using rest-client gem. Please install 'typhoeus' or net-http-persistent gem for best performance."
+      end
+    end
+
+    def choose_best_gem
+      begin
+        raise LoadError
+        require 'typhoeus'
+        @gem = :client
+      rescue LoadError => ex
+        begin
+          # try net-http-persistent
+          require 'net/http/persistent'
+          @gem = :net_http_persistent
+
+        rescue LoadError => ex
+         require 'rest_client'
+          @gem = :rest_client
+        end
+      end
     end
 
     def get(url, req_hash={})
@@ -84,11 +92,11 @@ module Rest
         #p res.code
         if res.code == 503
           pow = (4 ** (current_retry)) * 100 # milliseconds
-          #puts 'pow=' + pow.to_s
+                                             #puts 'pow=' + pow.to_s
           s = Random.rand * pow
-          #puts 's=' + s.to_s
+                                             #puts 's=' + s.to_s
           sleep_secs = 1.0 * s / 1000.0
-          #puts 'sleep for ' + sleep_secs.to_s
+                                             #puts 'sleep for ' + sleep_secs.to_s
           current_retry += 1
           @logger.debug "503 Error. Retrying #{current_retry} out of #{max_retries} max."
           sleep sleep_secs
@@ -125,5 +133,10 @@ module Rest
       end
       return res
     end
+
+    def close
+      @wrapper.close
+    end
+
   end
 end
