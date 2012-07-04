@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "uber_config"
   gem.add_development_dependency "typhoeus"
   gem.add_development_dependency "net-http-persistent"
+  gem.add_development_dependency "quicky"
 
 end
 

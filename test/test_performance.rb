@@ -1,6 +1,8 @@
 gem 'test-unit'
 require 'test/unit'
 require 'yaml'
+require 'quicky'
+
 require_relative 'test_base'
 
 class TestTests < TestBase
@@ -11,30 +13,27 @@ class TestTests < TestBase
 
   def test_get_performance
 
-    times = 100
+    times = 10
 
-    collector = []
+    quicky = Quicky::Timer.new
 
-    collector << run_perf(times, :typhoeus)
-    collector << run_perf(times, :rest_client)
-    collector << run_perf(times, :net_http_persistent)
+    to_run = [:typhoeus, :rest_client, :net_http_persistent]
+    to_run.each do |gem|
+      run_perf(quicky, times, gem)
+    end
 
-    collector.each do |c|
-      p c
+    quicky.results.each_pair do |k, v|
+      puts "#{k}: #{v.duration}"
     end
 
   end
 
-  def run_perf(times, gem)
+  def run_perf(quicky, times, gem)
     puts "Starting #{gem} test..."
-    t = Time.now
     client = Rest::Client.new(:gem => gem)
-    times.times do |i|
+    quicky.loop(gem, times) do
       client.get("http://requestb.in/ydyd4nyd")
     end
-    duration = Time.now.to_f - t.to_f
-    puts "#{times} posts took #{duration}"
-    {:gem=>gem, :duration=>duration}
   end
 
 end
