@@ -1,5 +1,3 @@
-# Put config.yml file in ~/Dropbox/configs/ironmq_gem/test/config.yml
-
 gem 'test-unit'
 require 'test/unit'
 require 'yaml'

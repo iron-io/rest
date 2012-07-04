@@ -51,7 +51,8 @@ module Rest
       else
         require_relative 'wrappers/rest_client_wrapper'
         @wrapper = Rest::Wrappers::RestClientWrapper.new
-        Rest.puts "Using rest-client gem. Please install 'typhoeus' or net-http-persistent gem for best performance."
+        hint = (options[:gem] ? "" : " Please install 'typhoeus' or net-http-persistent gem for best performance.")
+        Rest.puts "Using rest-client gem.#{hint}"
       end
     end
 
