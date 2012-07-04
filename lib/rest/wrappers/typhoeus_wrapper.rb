@@ -11,7 +11,7 @@ module Rest
       end
     end
 
-    class TyphoeusWrapper
+    class TyphoeusWrapper < BaseWrapper
 
       def default_typhoeus_options
         req_hash = {}
