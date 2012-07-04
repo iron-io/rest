@@ -25,7 +25,7 @@ module Rest
 
     end
 
-    class RestClientWrapper
+    class RestClientWrapper < BaseWrapper
 
       def default_headers
         {}
