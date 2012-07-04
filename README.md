@@ -28,7 +28,7 @@ Supported http libraries are:
 Then use it:
 
 GET
-=========
+------
 
     @rest.get(url, options...)
 
@@ -38,7 +38,7 @@ options:
 - :headers => headers
 
 POST
-======
+-----
 
     @rest.post(url, options...)
 
@@ -48,7 +48,7 @@ options:
 - :headers => headers
 
 PUT
-======
+------
 
     @rest.put(url, options...)
 
@@ -58,9 +58,15 @@ options:
 - :headers => headers
 
 DELETE
-======
+-------- 
 
     @rest.delete(url, options...)
 
+Responses
+=========
 
+The response object you get back will always be consistent and will have the following functions:
+
+    response.code
+    response.body
 
