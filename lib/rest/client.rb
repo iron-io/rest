@@ -19,6 +19,8 @@ module Rest
     end
   end
 
+  require_relative 'wrappers/base_wrapper'
+
   def self.puts(s)
     Kernel.puts("rest gem: #{s}")
   end
@@ -49,7 +51,6 @@ module Rest
         @wrapper = Rest::Wrappers::NetHttpPersistentWrapper.new(self)
         Rest.puts "Using net-http-persistent gem."
       else
-        require_relative 'wrappers/rest_client_wrapper'
         @wrapper = Rest::Wrappers::RestClientWrapper.new
         hint = (options[:gem] ? "" : " Please install 'typhoeus' or net-http-persistent gem for best performance.")
         Rest.puts "Using rest-client gem.#{hint}"
@@ -131,6 +132,14 @@ module Rest
       res = nil
       perform_op do
         res = @wrapper.delete(url, req_hash)
+      end
+      return res
+    end
+
+    def post_file(url, req_hash={})
+      res = nil
+      perform_op do
+        res = @wrapper.post_file(url, req_hash)
       end
       return res
     end

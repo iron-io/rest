@@ -1,5 +1,4 @@
 require 'net/http/persistent'
-require_relative 'base_wrapper'
 
 module Rest
 
