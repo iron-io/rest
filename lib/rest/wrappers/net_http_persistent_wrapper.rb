@@ -35,7 +35,10 @@ module Rest
       end
 
       def default_headers
-        {}
+        {
+            "Accept-Encoding" => "gzip, deflate",
+            #"Accept" => "*/*; q=0.5, application/xml"
+        }
       end
 
       def add_headers(post, req_hash, default_headers)
@@ -56,7 +59,7 @@ module Rest
           uri = URI(url)
           #p uri
           #p uri.path
-          post = Net::HTTP::Get.new fix_path(uri.path)
+          post = Net::HTTP::Get.new fix_path(uri.request_uri)
           add_headers(post, req_hash, default_headers)
           response = http.request uri, post
           @client.logger.debug response.class.name

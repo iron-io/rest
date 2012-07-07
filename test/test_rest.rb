@@ -22,6 +22,18 @@ class TestTests < TestBase
 
   end
 
+  def test_gets
+    @token = "abctoken"
+    headers = {
+        'Content-Type' => 'application/json',
+        'Authorization' => "OAuth #{@token}",
+        'User-Agent' => "someagent"
+    }
+    body = {"foo" => "bar"}
+    response = @rest.get("http://requestb.in/16q6zwq1?param1=x")
+
+  end
+
   def test_post_with_headers
 
     @token = "abctoken"
