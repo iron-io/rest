@@ -21,9 +21,9 @@ module Rest
 
   require_relative 'wrappers/base_wrapper'
 
-  def self.puts(s)
-    Kernel.puts("rest gem: #{s}")
-  end
+  #def self.puts(s)
+  #  Kernel.puts("rest gem: #{s}")
+  #end
 
   class Client
 
@@ -45,15 +45,15 @@ module Rest
       if @gem == :typhoeus
         require_relative 'wrappers/typhoeus_wrapper'
         @wrapper = Rest::Wrappers::TyphoeusWrapper.new
-        Rest.puts "Using typhoeus gem."
+        @logger.debug "Using typhoeus gem."
       elsif @gem == :net_http_persistent
         require_relative 'wrappers/net_http_persistent_wrapper'
         @wrapper = Rest::Wrappers::NetHttpPersistentWrapper.new(self)
-        Rest.puts "Using net-http-persistent gem."
+        @logger.debug "Using net-http-persistent gem."
       else
         @wrapper = Rest::Wrappers::RestClientWrapper.new
         hint = (options[:gem] ? "" : " Please install 'typhoeus' or net-http-persistent gem for best performance.")
-        Rest.puts "Using rest-client gem.#{hint}"
+        @logger.debug "Using rest-client gem.#{hint}"
       end
     end
 
@@ -67,7 +67,6 @@ module Rest
           # try net-http-persistent
           require 'net/http/persistent'
           @gem = :net_http_persistent
-
         rescue LoadError => ex
          require 'rest_client'
           @gem = :rest_client
