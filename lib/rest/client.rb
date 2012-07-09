@@ -82,6 +82,8 @@ module Rest
       return res
     end
 
+    # This will attempt to perform the operation with an exponential backoff on 503 errors.
+    # Amazon services throw 503
     def perform_op(&blk)
       max_retries = @options[:max_retries] || 5
       current_retry = 0
@@ -97,9 +99,9 @@ module Rest
           s = Random.rand * pow
                                              #puts 's=' + s.to_s
           sleep_secs = 1.0 * s / 1000.0
-                                             #puts 'sleep for ' + sleep_secs.to_s
+                                             puts 'sleep for ' + sleep_secs.to_s
           current_retry += 1
-          @logger.debug "503 Error. Retrying #{current_retry} out of #{max_retries} max."
+          @logger.debug "503 Received. Retrying #{current_retry} out of #{max_retries} max in #{sleep_secs} seconds."
           sleep sleep_secs
         else
           break

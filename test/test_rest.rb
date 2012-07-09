@@ -19,7 +19,12 @@ class TestTests < TestBase
     assert response.code == 200
     #p response.body
     assert response.body.include?("Social Coding")
+  end
 
+  def test_backoff
+    response = @rest.get("http://smooth-sword-1395.herokuapp.com/code/503?switch_after=3&switch_to=200")
+    p response
+    p response.code
   end
 
   def test_gets
