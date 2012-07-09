@@ -13,7 +13,7 @@ class TestBase < Test::Unit::TestCase
  def setup
     puts 'setup'
     #@config = YAML::load_file(File.expand_path(File.join("~", "Dropbox", "configs", "rest", "test", "config.yml")))
-    @rest = Rest::Client.new
+    @rest = Rest::Client.new(:gem=>:excon)
     @rest.logger.level = Logger::DEBUG
 
   end

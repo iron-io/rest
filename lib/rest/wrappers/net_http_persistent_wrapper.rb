@@ -36,7 +36,7 @@ module Rest
 
       def default_headers
         {
-            "Accept-Encoding" => "gzip, deflate",
+            #"Accept-Encoding" => "gzip, deflate",
             #"Accept" => "*/*; q=0.5, application/xml"
         }
       end
@@ -58,7 +58,20 @@ module Rest
 
           uri = URI(url)
           #p uri
-          #p uri.path
+          p uri.path
+          #p uri.request_uri
+          puts "query: " + uri.query.inspect
+          puts "fragment: " + uri.fragment.inspect
+          if req_hash[:params]
+            new_q = URI.encode_www_form(req_hash[:params])
+            if uri.query
+              puts 'already has query'
+              new_q = uri.query + "&" + new_q
+            end
+            puts "new_q: " + new_q
+            uri.query = new_q
+          end
+          p uri.request_uri
           post = Net::HTTP::Get.new fix_path(uri.request_uri)
           add_headers(post, req_hash, default_headers)
           response = http.request uri, post

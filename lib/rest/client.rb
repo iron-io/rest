@@ -5,25 +5,11 @@ require 'logger'
 # The purpose of this is so that users who can't install binaries easily (like windoze users)
 # can have fallbacks that work.
 
+require_relative 'errors'
+
 module Rest
 
-  class ClientError < StandardError
-
-  end
-
-
-  class TimeoutError < ClientError
-    def initialize(msg=nil)
-      msg ||= "HTTP Request Timed out."
-      super(msg)
-    end
-  end
-
   require_relative 'wrappers/base_wrapper'
-
-  #def self.puts(s)
-  #  Kernel.puts("rest gem: #{s}")
-  #end
 
   class Client
 
@@ -42,7 +28,11 @@ module Rest
         choose_best_gem()
       end
 
-      if @gem == :typhoeus
+      if @gem == :excon
+        require_relative 'wrappers/excon_wrapper'
+        @wrapper = Rest::Wrappers::ExconWrapper.new(self)
+        @logger.debug "Using excon gem."
+      elsif @gem == :typhoeus
         require_relative 'wrappers/typhoeus_wrapper'
         @wrapper = Rest::Wrappers::TyphoeusWrapper.new
         @logger.debug "Using typhoeus gem."

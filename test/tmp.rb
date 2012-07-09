@@ -6,9 +6,10 @@ rescue Exception => ex
   raise ex
 end
 
-@rest = Rest::Client.new # (:gem=>:rest_client)
+@rest = Rest::Client.new(:gem=>:net_http_persistent)
 @rest.logger.level = Logger::DEBUG
 
-response = @rest.get("http://smooth-sword-1395.herokuapp.com/code/503?switch_after=3&switch_to=200")
+begin
+response = @rest.get("http://rest-test.iron.io/code/400")
 p response
 p response.code

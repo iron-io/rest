@@ -1,22 +1,22 @@
-require 'rest_client'
+require 'excon'
 
 module Rest
 
   module Wrappers
-    class RestClientExceptionWrapper < HttpError
+    class ExconExceptionWrapper < ClientError
       def initialize(ex)
         super(ex.message)
         @ex = ex
       end
     end
 
-    class RestClientResponseWrapper
+    class ExconResponseWrapper
       def initialize(response)
         @response = response
       end
 
       def code
-        @response.code
+        @response.status
       end
 
       def body
@@ -25,7 +25,13 @@ module Rest
 
     end
 
-    class RestClientWrapper < BaseWrapper
+    class ExconWrapper < BaseWrapper
+
+      def initialize(client)
+        @client = client
+        # Would need to pass in base url to use persistent connection.
+        #@http = Excon.new("")
+      end
 
       def default_headers
         {}
@@ -34,13 +40,13 @@ module Rest
       def get(url, req_hash={})
         response = nil
         begin
+          uri = URI(url)
           req_hash[:method] = :get
           req_hash[:url] = url
           req_hash[:headers] ||= default_headers
-          req_hash[:headers][:params] = req_hash[:params] if req_hash[:params]
+          req_hash[:query] = req_hash[:params] if req_hash[:params]
           #p req_hash
-          r2 = RestClient::Request.execute(req_hash)
-          response = RestClientResponseWrapper.new(r2)
+          response = excon_request(url, req_hash)
         rescue RestClient::Exception => ex
           #p ex
           if ex.http_code == 404
@@ -51,14 +57,18 @@ module Rest
         response
       end
 
+      def excon_request(url, req_hash)
+        conn = Excon.new(url)
+        r2 = conn.request(req_hash)
+        response = ExconResponseWrapper.new(r2)
+      end
+
       def post(url, req_hash={})
         response = nil
         begin
           req_hash[:method] = :post
           req_hash[:url] = url
-          req_hash[:payload] = req_hash[:body] if req_hash[:body]
-          r2 = RestClient::Request.execute(req_hash)
-          response = RestClientResponseWrapper.new(r2)
+          response = excon_request(url, req_hash)
         rescue RestClient::Exception => ex
           raise RestClientExceptionWrapper.new(ex)
         end
@@ -70,9 +80,7 @@ module Rest
         begin
           req_hash[:method] = :put
           req_hash[:url] = url
-          req_hash[:payload] = req_hash[:body] if req_hash[:body]
-          r2 = RestClient::Request.execute(req_hash)
-          response = RestClientResponseWrapper.new(r2)
+          response = excon_request(url, req_hash)
         rescue RestClient::Exception => ex
           raise RestClientExceptionWrapper.new(ex)
         end
@@ -84,10 +92,7 @@ module Rest
         begin
           req_hash[:method] = :delete
           req_hash[:url] = url
-          req_hash[:payload] = req_hash[:body] if req_hash[:body]
-          r2 = RestClient::Request.execute(req_hash)
-          response = RestClientResponseWrapper.new(r2)
-            # todo: make generic exception
+          response = excon_request(url, req_hash)
         rescue RestClient::Exception => ex
           raise RestClientExceptionWrapper.new(ex)
         end

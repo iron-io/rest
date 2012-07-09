@@ -24,6 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "uber_config"
   gem.add_development_dependency "typhoeus"
   gem.add_development_dependency "quicky"
+  gem.add_development_dependency "excon"
 
 end
 

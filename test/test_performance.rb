@@ -5,7 +5,7 @@ require 'quicky'
 
 require_relative 'test_base'
 
-class TestTests < TestBase
+class TestPerformance < TestBase
   def setup
     super
 

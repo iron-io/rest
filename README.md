@@ -70,3 +70,11 @@ The response object you get back will always be consistent and will have the fol
     response.code
     response.body
 
+
+Errors
+======
+
+If it didn't get a response, you will get a Rest::ClientError
+
+If status code is 40X or 50X, you will get a Rest::HttpError.
+
