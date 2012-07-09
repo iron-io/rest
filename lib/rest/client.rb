@@ -60,17 +60,19 @@ module Rest
     def choose_best_gem
       begin
         raise LoadError
-        require 'typhoeus'
-        @gem = :client
+        #require 'typhoeus'
+        #@gem = :client
       rescue LoadError => ex
         begin
           # try net-http-persistent
-          require 'net/http/persistent'
-          @gem = :net_http_persistent
+          #require 'net/http/persistent'
+          #@gem = :net_http_persistent
         rescue LoadError => ex
-         require 'rest_client'
-          @gem = :rest_client
         end
+      end
+      if @gem.nil?
+        require 'rest_client'
+        @gem = :rest_client
       end
     end
 
@@ -99,7 +101,7 @@ module Rest
           s = Random.rand * pow
                                              #puts 's=' + s.to_s
           sleep_secs = 1.0 * s / 1000.0
-                                             puts 'sleep for ' + sleep_secs.to_s
+          puts 'sleep for ' + sleep_secs.to_s
           current_retry += 1
           @logger.debug "503 Received. Retrying #{current_retry} out of #{max_retries} max in #{sleep_secs} seconds."
           sleep sleep_secs

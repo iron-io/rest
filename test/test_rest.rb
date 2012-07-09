@@ -22,7 +22,7 @@ class TestTests < TestBase
   end
 
   def test_backoff
-    response = @rest.get("http://smooth-sword-1395.herokuapp.com/code/503?switch_after=3&switch_to=200")
+    response = @rest.get("http://rest-test.iron.io/code/503?switch_after=3&switch_to=200")
     p response
     p response.code
   end
