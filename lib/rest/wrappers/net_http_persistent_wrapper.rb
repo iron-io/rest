@@ -10,7 +10,7 @@ module Rest
       end
     end
 
-    class NetHttpPersistentResponseWrapper
+    class NetHttpPersistentResponseWrapper < BaseResponseWrapper
       def initialize(response)
         @response = response
       end
@@ -21,6 +21,10 @@ module Rest
 
       def body
         @response.body
+      end
+
+      def headers_orig
+        @response.to_hash
       end
 
     end
@@ -36,7 +40,7 @@ module Rest
 
       def default_headers
         {
-            "Accept-Encoding" => "gzip, deflate",
+            #"Accept-Encoding" => "gzip, deflate",
             #"Accept" => "*/*; q=0.5, application/xml"
         }
       end
@@ -53,37 +57,49 @@ module Rest
       def get(url, req_hash={}, options={})
         @client.logger.debug "limit #{options[:limit]}"
         options[:limit] ||= 10
-        response = nil
+        r = nil
         begin
 
           uri = URI(url)
           #p uri
           #p uri.path
+          #p uri.request_uri
+          #puts "query: " + uri.query.inspect
+          #puts "fragment: " + uri.fragment.inspect
+          if req_hash[:params]
+            new_q = URI.encode_www_form(req_hash[:params])
+            if uri.query
+              new_q = uri.query + "&" + new_q
+            end
+            #puts "new_q: " + new_q
+            uri.query = new_q
+          end
+          #p uri.request_uri
           post = Net::HTTP::Get.new fix_path(uri.request_uri)
           add_headers(post, req_hash, default_headers)
           response = http.request uri, post
           @client.logger.debug response.class.name
+          r = NetHttpPersistentResponseWrapper.new(response)
           case response
-            when Net::HTTPRedirection
-              @client.logger.debug "moved to #{response['location']}"
-              response = get(response['location'], req_hash, {limit: options[:limit]-1})
-            when Net::HTTPMovedPermanently
-              @client.logger.debug "moved to #{response['location']}"
-              response = get(response['location'], req_hash, {limit: options[:limit]-1})
+            when Net::HTTPClientError, Net::HTTPServerError
+              raise Rest::HttpError.new(r)
           end
-          response = NetHttpPersistentResponseWrapper.new(response)
-        rescue Net::HTTPClientError => ex
-          if ex.code == 404
-            return NetHttpPersistentResponseWrapper.new(ex)
-          end
-          raise NetHttpPersistentExceptionWrapper.new(ex)
-        rescue Net::HTTPServerError => ex
-          if ex.code == 404
-            return NetHttpPersistentResponseWrapper.new(ex)
-          end
-          raise NetHttpPersistentExceptionWrapper.new(ex)
+          #  when Net::HTTPRedirection
+          #    @client.logger.debug "moved to #{response['location']}"
+          #    response = get(response['location'], req_hash, {limit: options[:limit]-1})
+          #  when Net::HTTPMovedPermanently
+          #    @client.logger.debug "moved to #{response['location']}"
+          #    response = get(response['location'], req_hash, {limit: options[:limit]-1})
+          #end
+        #rescue Net::HTTPClientError, Net::HTTPServerError => ex
+        #  raise NetHttpPersistentExceptionWrapper.new(ex)
+        #rescue Net::HTTPServerError => ex
+        #  if ex.code == 404
+        #    return NetHttpPersistentResponseWrapper.new(ex)
+        #  end
+        #  raise NetHttpPersistentExceptionWrapper.new(ex)
         end
-        response
+        r
       end
 
       def fix_path(path)
