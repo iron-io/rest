@@ -7,7 +7,17 @@ module Rest
   end
 
   class HttpError < RestError
+    def initialize(response)
+      super("#{response.code} Error")
+      @response = response
+    end
 
+    def response
+      @response
+    end
+    def code
+      response.code
+    end
   end
 
   # If it didn't even get a response, it will be a ClientError
@@ -20,6 +30,10 @@ module Rest
       msg ||= "HTTP Request Timed out."
       super(msg)
     end
+  end
+
+  class InvalidResponseError < RestError
+
   end
 end
 

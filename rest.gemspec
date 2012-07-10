@@ -20,10 +20,12 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "net-http-persistent"
 
   gem.add_development_dependency "test-unit"
+  gem.add_development_dependency "minitest"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "uber_config"
   gem.add_development_dependency "typhoeus"
   gem.add_development_dependency "quicky"
+  gem.add_development_dependency "net-http-persistent"
   gem.add_development_dependency "excon"
 
 end

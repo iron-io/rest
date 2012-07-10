@@ -4,13 +4,15 @@ module Rest
 
   module Wrappers
     class RestClientExceptionWrapper < HttpError
+      attr_reader :ex
+
       def initialize(ex)
-        super(ex.message)
+        super(ex.response)
         @ex = ex
       end
     end
 
-    class RestClientResponseWrapper
+    class RestClientResponseWrapper < BaseResponseWrapper
       def initialize(response)
         @response = response
       end
@@ -21,6 +23,10 @@ module Rest
 
       def body
         @response.body
+      end
+
+      def headers_orig
+        @response.headers
       end
 
     end
@@ -43,9 +49,9 @@ module Rest
           response = RestClientResponseWrapper.new(r2)
         rescue RestClient::Exception => ex
           #p ex
-          if ex.http_code == 404
-            return RestClientResponseWrapper.new(ex.response)
-          end
+          #if ex.http_code == 404
+          #  return RestClientResponseWrapper.new(ex.response)
+          #end
           raise RestClientExceptionWrapper.new(ex)
         end
         response

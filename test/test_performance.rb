@@ -12,6 +12,7 @@ class TestPerformance < TestBase
   end
 
   def test_get_performance
+    puts 'test_get_performance'
 
     times = 10
 
@@ -32,7 +33,7 @@ class TestPerformance < TestBase
     puts "Starting #{gem} test..."
     client = Rest::Client.new(:gem => gem)
     quicky.loop(gem, times) do
-      client.get("http://requestb.in/ydyd4nyd")
+      client.get(bin)
     end
   end
 

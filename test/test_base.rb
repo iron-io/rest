@@ -8,13 +8,18 @@ rescue Exception => ex
   raise ex
 end
 
-
 class TestBase < Test::Unit::TestCase
- def setup
+
+  def setup
     puts 'setup'
-    #@config = YAML::load_file(File.expand_path(File.join("~", "Dropbox", "configs", "rest", "test", "config.yml")))
-    @rest = Rest::Client.new(:gem=>:excon)
+    @rest = Rest::Client.new(:gem => :excon)
     @rest.logger.level = Logger::DEBUG
+    @request_bin = "http://requestb.in/18l5ny91"
 
   end
+
+  def bin
+    @request_bin
+  end
+
 end

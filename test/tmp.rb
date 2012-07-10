@@ -1,15 +1,27 @@
+gem 'test-unit'
+require 'test/unit'
 require 'yaml'
-begin
-  require File.join(File.dirname(__FILE__), '../lib/rest')
-rescue Exception => ex
-  puts "Could NOT load gem: " + ex.message
-  raise ex
+require_relative 'test_base'
+
+class TestTemp < TestBase
+  def setup
+    super
+
+  end
+
+  def test_500
+    puts '500'
+    begin
+      puts 'in block'
+      response = @rest.get("http://rest-test.iron.io/code/500")
+      assert false, "shouldn't get here"
+    rescue => ex
+      p ex
+      assert ex.is_a?(Rest::HttpError)
+      assert ex.response
+      assert ex.response.body
+      assert ex.code == 500
+    end
+  end
 end
 
-@rest = Rest::Client.new(:gem=>:net_http_persistent)
-@rest.logger.level = Logger::DEBUG
-
-begin
-response = @rest.get("http://rest-test.iron.io/code/400")
-p response
-p response.code

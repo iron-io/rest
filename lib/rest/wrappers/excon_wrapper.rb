@@ -10,7 +10,7 @@ module Rest
       end
     end
 
-    class ExconResponseWrapper
+    class ExconResponseWrapper < BaseResponseWrapper
       def initialize(response)
         @response = response
       end
@@ -21,6 +21,10 @@ module Rest
 
       def body
         @response.body
+      end
+
+      def headers_orig
+        @response.headers
       end
 
     end
@@ -49,10 +53,7 @@ module Rest
           response = excon_request(url, req_hash)
         rescue RestClient::Exception => ex
           #p ex
-          if ex.http_code == 404
-            return RestClientResponseWrapper.new(ex.response)
-          end
-          raise RestClientExceptionWrapper.new(ex)
+          raise ExconExceptionWrapper.new(ex)
         end
         response
       end
@@ -61,6 +62,10 @@ module Rest
         conn = Excon.new(url)
         r2 = conn.request(req_hash)
         response = ExconResponseWrapper.new(r2)
+        if response.code >= 400
+          raise HttpError.new(response)
+        end
+        response
       end
 
       def post(url, req_hash={})
@@ -68,9 +73,10 @@ module Rest
         begin
           req_hash[:method] = :post
           req_hash[:url] = url
+          to_json_parts(req_hash)
           response = excon_request(url, req_hash)
         rescue RestClient::Exception => ex
-          raise RestClientExceptionWrapper.new(ex)
+          raise HttpError.new(ex)
         end
         response
       end
