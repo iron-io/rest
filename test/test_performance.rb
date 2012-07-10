@@ -5,13 +5,14 @@ require 'quicky'
 
 require_relative 'test_base'
 
-class TestTests < TestBase
+class TestPerformance < TestBase
   def setup
     super
 
   end
 
   def test_get_performance
+    puts 'test_get_performance'
 
     times = 10
 
@@ -32,7 +33,7 @@ class TestTests < TestBase
     puts "Starting #{gem} test..."
     client = Rest::Client.new(:gem => gem)
     quicky.loop(gem, times) do
-      client.get("http://requestb.in/ydyd4nyd")
+      client.get(bin)
     end
   end
 
