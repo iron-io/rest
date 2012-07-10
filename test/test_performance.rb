@@ -14,11 +14,11 @@ class TestPerformance < TestBase
   def test_get_performance
     puts 'test_get_performance'
 
-    times = 10
+    times = 100
 
     quicky = Quicky::Timer.new
 
-    to_run = [:typhoeus, :rest_client, :net_http_persistent]
+    to_run = [:typhoeus, :rest_client, :net_http_persistent, :excon]
     to_run.each do |gem|
       run_perf(quicky, times, gem)
     end
@@ -33,7 +33,7 @@ class TestPerformance < TestBase
     puts "Starting #{gem} test..."
     client = Rest::Client.new(:gem => gem)
     quicky.loop(gem, times) do
-      client.get(bin)
+      client.get("http://rest-test.iron.io/code/200")
     end
   end
 
