@@ -28,8 +28,6 @@ module Rest
         choose_best_gem()
       end
 
-      p @gem
-
       if @gem == :excon
         require_relative 'wrappers/excon_wrapper'
         @wrapper = Rest::Wrappers::ExconWrapper.new(self)
