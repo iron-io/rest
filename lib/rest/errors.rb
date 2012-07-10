@@ -18,6 +18,10 @@ module Rest
     def code
       response.code
     end
+
+    def to_s
+      "HTTP #{code} Error. #{response.body}"
+    end
   end
 
   # If it didn't even get a response, it will be a ClientError

@@ -51,7 +51,6 @@ class TestRest < TestBase
     p response.headers
     assert response.headers.is_a?(Hash)
 
-
   end
 
   def test_404
@@ -65,6 +64,8 @@ class TestRest < TestBase
       assert ex.response
       assert ex.response.body
       assert ex.code == 404
+      assert ex.response.body.include?("404")
+      assert ex.to_s.include?("404")
     end
   end
 
@@ -73,7 +74,7 @@ class TestRest < TestBase
       response = @rest.get("http://rest-test.iron.io/code/400")
       assert false, "shouldn't get here"
     rescue Rest::HttpError => ex
-      puts "EX: " + ex.inspect
+      puts "EX: #{ex}"
       p ex.backtrace
       assert ex.is_a?(Rest::HttpError)
       assert ex.response
