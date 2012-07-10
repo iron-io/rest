@@ -29,7 +29,6 @@ PLATFORMS
 DEPENDENCIES
   excon
   minitest
-  net-http-persistent
   quicky
   rake
   rest!
