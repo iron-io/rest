@@ -1,8 +1,22 @@
 Rest Wrapper
 -------------
 
-HTTP/REST client wrapper that provides a standard interface for making http requests using different http clients.
-If no client is specified it will choose the best one you have installed.
+HTTP/REST client wrapper that provides a standard interface for making http requests using different http
+clients. If no client is specified **it will choose the best http client** you have installed based on
+our performance tests.
+
+Features
+========
+
+* All clients behave exactly the same:
+  * Same error behavior
+  * Same 30X redirect behavior
+  * Same response object methods
+  * Same way to access and manipulate requests and responses such as body, headers, code, etc.
+* Chooses best client you have installed on your system based on what we have found performs the best.
+  * Currently net_http_persistent and typhoeus are nearly the same, but since net_http_persistent doesn't have a binary
+    dependency, it wins.
+
 
 Getting Started
 ==============

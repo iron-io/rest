@@ -111,6 +111,10 @@ class TestRest < TestBase
                           :body => body,
                           :headers => headers)
     p response
+    response = @rest.post("http://rest-test.iron.io/code/200",
+                          :body => body,
+                          :headers => headers)
+    p response
 
     response = @rest.post("#{bin}",
                           :body => "some string body",

@@ -12,9 +12,9 @@ class TestBase < Test::Unit::TestCase
 
   def setup
     puts 'setup'
-    @rest = Rest::Client.new(:gem => :excon)
+    @rest = Rest::Client.new(:gem => :net_http_persistent)
     @rest.logger.level = Logger::DEBUG
-    @request_bin = "http://requestb.in/18l5ny91"
+    @request_bin = "http://requestb.in/13t6hs51"
 
   end
 
