@@ -113,6 +113,8 @@ module Rest
           break
         rescue Rest::HttpError => ex
           if ex.code == 503
+            raise ex if current_retry == max_retries - 1
+
             pow = (4 ** (current_retry)) * 100 # milliseconds
                                                #puts 'pow=' + pow.to_s
             s = Random.rand * pow
