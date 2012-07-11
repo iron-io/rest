@@ -87,11 +87,13 @@ module Rest
       current_retry = 0
       current_follow = 0
       success = false
+      tries = 0
       res = nil
       while current_retry < max_retries && current_follow < max_follows do
+        tries += 1
         begin
           res = yield blk
-          res.tries = current_retry + 1
+          res.tries = tries
           if res.code >= 300 && res.code < 400
             # try new location
             #p res.headers

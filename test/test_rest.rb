@@ -25,8 +25,24 @@ class TestRest < TestBase
     response = @rest.get("http://rest-test.iron.io/code/503?switch_after=3&switch_to=200")
     p response
     p response.code
-    p response.tries == 3
+    assert response.tries == 3
     assert response.code == 200
+
+    # Now let's try to error out
+    begin
+      response = @rest.get("http://rest-test.iron.io/code/503")
+      assert false, "shouldn't get here"
+    rescue Rest::HttpError => ex
+      puts "EX: " + ex.inspect
+      p ex.backtrace
+      assert ex.is_a?(Rest::HttpError)
+      assert ex.response
+      assert ex.response.body
+      assert ex.code == 503
+      #assert ex.response.tries == 5 # the default max
+      assert ex.response.body.include?("503")
+      assert ex.to_s.include?("503")
+    end
 
   end
 
@@ -97,6 +113,7 @@ class TestRest < TestBase
       assert ex.code == 500
     end
   end
+
 
   def test_post_with_headers
 

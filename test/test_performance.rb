@@ -14,7 +14,7 @@ class TestPerformance < TestBase
   def test_get_performance
     puts 'test_get_performance'
 
-    times = 100
+    times = 20
 
     quicky = Quicky::Timer.new
 

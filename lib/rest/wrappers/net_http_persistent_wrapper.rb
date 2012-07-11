@@ -36,6 +36,7 @@ module Rest
       def initialize(client)
         @client = client
         @http = Net::HTTP::Persistent.new 'rest_gem'
+        @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
 
       def default_headers
