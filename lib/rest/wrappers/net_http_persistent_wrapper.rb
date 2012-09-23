@@ -13,6 +13,14 @@ module Rest
     class NetHttpPersistentResponseWrapper < BaseResponseWrapper
       def initialize(response)
         @response = response
+
+        if response.header['content-encoding'].eql?('gzip')
+          Rest.logger.debug 'GZIPPED'
+          sio = StringIO.new( response.body )
+          gz = Zlib::GzipReader.new( sio )
+          page = gz.read()
+          @body = page
+        end
       end
 
       def code
@@ -20,6 +28,11 @@ module Rest
       end
 
       def body
+        @body || @response.body
+      end
+
+      # In case for some reason you want the unencoded body
+      def body_raw
         @response.body
       end
 
@@ -79,7 +92,11 @@ module Rest
           post = Net::HTTP::Get.new fix_path(uri.request_uri)
           add_headers(post, req_hash, default_headers)
           response = http.request uri, post
-          @client.logger.debug response.class.name
+          if @client.logger.debug?
+            @client.logger.debug "Response class: #{response.class.name}"
+            @client.logger.debug "Response headers: #{response.header.to_hash.inspect}"
+          end
+
           r = NetHttpPersistentResponseWrapper.new(response)
           case response
             when Net::HTTPClientError, Net::HTTPServerError
@@ -92,13 +109,13 @@ module Rest
           #    @client.logger.debug "moved to #{response['location']}"
           #    response = get(response['location'], req_hash, {limit: options[:limit]-1})
           #end
-        #rescue Net::HTTPClientError, Net::HTTPServerError => ex
-        #  raise NetHttpPersistentExceptionWrapper.new(ex)
-        #rescue Net::HTTPServerError => ex
-        #  if ex.code == 404
-        #    return NetHttpPersistentResponseWrapper.new(ex)
-        #  end
-        #  raise NetHttpPersistentExceptionWrapper.new(ex)
+          #rescue Net::HTTPClientError, Net::HTTPServerError => ex
+          #  raise NetHttpPersistentExceptionWrapper.new(ex)
+          #rescue Net::HTTPServerError => ex
+          #  if ex.code == 404
+          #    return NetHttpPersistentResponseWrapper.new(ex)
+          #  end
+          #  raise NetHttpPersistentExceptionWrapper.new(ex)
         end
         r
       end

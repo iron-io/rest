@@ -11,6 +11,14 @@ module Rest
 
   require_relative 'wrappers/base_wrapper'
 
+  def self.logger=(logger)
+    @logger = logger
+  end
+
+  def self.logger()
+    @logger
+  end
+
   class Client
 
     attr_accessor :options, :logger, :gem
@@ -18,9 +26,9 @@ module Rest
     # - :gem => specify gem explicitly
     #
     def initialize(options={})
-      @logger = Logger.new(STDOUT)
-      @logger.level=Logger::INFO
       @options = options
+      @logger = Logger.new(STDOUT)
+      Rest.logger = @logger
 
       @gem = options[:gem] if options[:gem]
 

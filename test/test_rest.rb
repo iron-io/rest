@@ -47,19 +47,6 @@ class TestRest < TestBase
   end
 
   def test_gets
-    @token = "abctoken"
-    headers = {
-        'Content-Type' => 'application/json',
-        'Authorization' => "OAuth #{@token}",
-        'User-Agent' => "someagent"
-    }
-    body = {"foo" => "bar"}
-    response = @rest.get("#{bin}?param1=x")
-
-    # params as hash
-    response = @rest.get("#{bin}?x=y#frag", :params => {:param2 => "abc"})
-    response = @rest.get("#{bin}", :params => {param3: "xyz"})
-    response = @rest.get("#{bin}")
 
     response = @rest.get("http://rest-test.iron.io/code/200")
     assert response.code == 200
@@ -70,6 +57,7 @@ class TestRest < TestBase
   end
 
   def test_404
+    puts 'test_404'
     begin
       response = @rest.get("http://rest-test.iron.io/code/404")
       assert false, "shouldn't get here"
@@ -86,6 +74,7 @@ class TestRest < TestBase
   end
 
   def test_400
+    puts 'test_400'
     begin
       response = @rest.get("http://rest-test.iron.io/code/400")
       assert false, "shouldn't get here"
@@ -139,6 +128,18 @@ class TestRest < TestBase
     p response
 
 
+  end
+
+  def test_gzip
+
+    options = {}
+    url = "http://api.stackexchange.com/2.1/users?order=desc&sort=reputation&site=stackoverflow"
+    rest = Rest::Client.new
+
+    res = rest.get(url, options)
+
+    puts res.body
+    assert res.body.include?("items")
   end
 
 end

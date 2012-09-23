@@ -9,19 +9,16 @@ class TestTemp < TestBase
 
   end
 
-  def test_500
-    puts '500'
-    begin
-      puts 'in block'
-      response = @rest.get("http://rest-test.iron.io/code/500")
-      assert false, "shouldn't get here"
-    rescue => ex
-      p ex
-      assert ex.is_a?(Rest::HttpError)
-      assert ex.response
-      assert ex.response.body
-      assert ex.code == 500
-    end
+  def test_gzip
+
+    options = {}
+    url = "http://api.stackexchange.com/2.1/users?order=desc&sort=reputation&site=stackoverflow"
+    rest = Rest::Client.new
+
+    res = rest.get(url, options)
+
+    puts res.body
+    assert res.body.include?("items")
   end
 end
 
