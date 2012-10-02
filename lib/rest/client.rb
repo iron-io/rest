@@ -27,7 +27,9 @@ module Rest
     #
     def initialize(options={})
       @options = options
+      # todo: initialize this as module variable above
       @logger = Logger.new(STDOUT)
+      @logger.level = Logger::INFO
       Rest.logger = @logger
 
       @gem = options[:gem] if options[:gem]
