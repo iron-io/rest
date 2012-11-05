@@ -9,7 +9,6 @@ class TestRest < TestBase
   def setup
     super
 
-
   end
 
   def test_basics
@@ -47,59 +46,72 @@ class TestRest < TestBase
   end
 
   def test_gets
-
-    response = @rest.get("http://rest-test.iron.io/code/200")
-    assert response.code == 200
-    assert response.body.include?("200")
-    p response.headers
-    assert response.headers.is_a?(Hash)
-
+    ALL_OPS.each do |op|
+      puts "Trying #{op}"
+      response = @rest.__send__(op, "http://rest-test.iron.io/code/200")
+      assert response.code == 200
+      assert response.body.include?("200")
+      p response.headers
+      assert response.headers.is_a?(Hash)
+    end
   end
+
 
   def test_404
     puts 'test_404'
-    begin
-      response = @rest.get("http://rest-test.iron.io/code/404")
-      assert false, "shouldn't get here"
-    rescue Rest::HttpError => ex
-      puts "EX: " + ex.inspect
-      p ex.backtrace
-      assert ex.is_a?(Rest::HttpError)
-      assert ex.response
-      assert ex.response.body
-      assert ex.code == 404
-      assert ex.response.body.include?("404")
-      assert ex.to_s.include?("404")
+    ALL_OPS.each do |op|
+      puts "Trying #{op}"
+      begin
+        response = @rest.__send__(op, "http://rest-test.iron.io/code/404")
+        assert false, "shouldn't get here"
+      rescue Rest::HttpError => ex
+        puts "Expected error: #{ex}"
+        #p ex.backtrace
+        assert ex.is_a?(Rest::HttpError)
+        assert ex.response
+        assert ex.response.body
+        assert ex.code == 404
+        assert ex.response.body.include?("404")
+        assert ex.to_s.include?("404")
+      end
     end
+
   end
 
   def test_400
     puts 'test_400'
-    begin
-      response = @rest.get("http://rest-test.iron.io/code/400")
-      assert false, "shouldn't get here"
-    rescue Rest::HttpError => ex
-      puts "EX: #{ex}"
-      p ex.backtrace
-      assert ex.is_a?(Rest::HttpError)
-      assert ex.response
-      assert ex.response.body
-      assert ex.code == 400
+    ALL_OPS.each do |op|
+      puts "Trying #{op}"
+      begin
+        response = @rest.__send__(op, "http://rest-test.iron.io/code/400")
+        assert false, "shouldn't get here"
+      rescue Rest::HttpError => ex
+        puts "Expected error: #{ex}"
+        #p ex.backtrace
+        assert ex.is_a?(Rest::HttpError)
+        assert ex.response
+        assert ex.response.body
+        assert ex.code == 400
+      end
     end
+
   end
 
   def test_500
-    puts '500'
-    begin
-      response = @rest.get("http://rest-test.iron.io/code/500")
-      assert false, "shouldn't get here"
-    rescue Rest::HttpError => ex
-      puts "EX: " + ex.inspect
-      p ex.backtrace
-      assert ex.is_a?(Rest::HttpError)
-      assert ex.response
-      assert ex.response.body
-      assert ex.code == 500
+    puts 'test_500'
+    ALL_OPS.each do |op|
+      puts "Trying #{op}"
+      begin
+        response = @rest.__send__(op, "http://rest-test.iron.io/code/500")
+        assert false, "shouldn't get here"
+      rescue Rest::HttpError => ex
+        puts "Expected error: #{ex}"
+        #p ex.backtrace
+        assert ex.is_a?(Rest::HttpError)
+        assert ex.response
+        assert ex.response.body
+        assert ex.code == 500
+      end
     end
   end
 
@@ -124,6 +136,15 @@ class TestRest < TestBase
     p parsed
     assert_equal body, JSON.parse(parsed['body'])
     assert_equal oauth, parsed['headers']['Authorization'.upcase]
+
+    body2 = "hello world"
+    response = @rest.post("http://rest-test.iron.io/code/200?store=#{key}",
+                          :body => body2,
+                          :headers => headers)
+    p response
+    response = @rest.get("http://rest-test.iron.io/stored/#{key}")
+    parsed = JSON.parse(response.body)
+    assert_equal body2, parsed['body']
 
     response = @rest.post("http://rest-test.iron.io/code/200",
                           :body => body,

@@ -16,8 +16,8 @@ module Rest
 
         if response.header['content-encoding'].eql?('gzip')
           Rest.logger.debug 'GZIPPED'
-          sio = StringIO.new( response.body )
-          gz = Zlib::GzipReader.new( sio )
+          sio = StringIO.new(response.body)
+          gz = Zlib::GzipReader.new(sio)
           page = gz.read()
           @body = page
         end
@@ -127,20 +127,18 @@ module Rest
 
 
       def post(url, req_hash={})
-        response = nil
-        begin
-          uri = URI(url)
-          post = Net::HTTP::Post.new fix_path(uri.request_uri)
-          add_headers(post, req_hash, default_headers)
-          post.body = stringed_body(req_hash[:body]) if req_hash[:body]
-          response = http.request uri, post
-          response = NetHttpPersistentResponseWrapper.new(response)
-        rescue Net::HTTPClientError => ex
-          raise NetHttpPersistentExceptionWrapper.new(ex)
-        rescue Net::HTTPServerError => ex
-          raise NetHttpPersistentExceptionWrapper.new(ex)
+        r = nil
+        uri = URI(url)
+        post = Net::HTTP::Post.new fix_path(uri.request_uri)
+        add_headers(post, req_hash, default_headers)
+        post.body = stringed_body(req_hash[:body]) if req_hash[:body]
+        response = http.request uri, post
+        r = NetHttpPersistentResponseWrapper.new(response)
+        case response
+          when Net::HTTPClientError, Net::HTTPServerError
+            raise Rest::HttpError.new(r)
         end
-        response
+        r
       end
 
       def stringed_body(body)
@@ -152,36 +150,32 @@ module Rest
       end
 
       def put(url, req_hash={})
-        response = nil
-        begin
-          uri = URI(url)
-          post = Net::HTTP::Put.new fix_path(uri.request_uri)
-          add_headers(post, req_hash, default_headers)
-          post.body = stringed_body(req_hash[:body]) if req_hash[:body]
-          response = http.request uri, post
-          response = NetHttpPersistentResponseWrapper.new(response)
-        rescue Net::HTTPClientError => ex
-          raise NetHttpPersistentExceptionWrapper.new(ex)
-        rescue Net::HTTPServerError => ex
-          raise NetHttpPersistentExceptionWrapper.new(ex)
+        r = nil
+        uri = URI(url)
+        post = Net::HTTP::Put.new fix_path(uri.request_uri)
+        add_headers(post, req_hash, default_headers)
+        post.body = stringed_body(req_hash[:body]) if req_hash[:body]
+        response = http.request uri, post
+        r = NetHttpPersistentResponseWrapper.new(response)
+        case response
+          when Net::HTTPClientError, Net::HTTPServerError
+            raise Rest::HttpError.new(r)
         end
-        response
+        r
       end
 
       def delete(url, req_hash={})
-        response = nil
-        begin
-          uri = URI(url)
-          post = Net::HTTP::Delete.new fix_path(uri.request_uri)
-          add_headers(post, req_hash, default_headers)
-          response = http.request uri, post
-          response = NetHttpPersistentResponseWrapper.new(response)
-        rescue Net::HTTPClientError => ex
-          raise NetHttpPersistentExceptionWrapper.new(ex)
-        rescue Net::HTTPServerError => ex
-          raise NetHttpPersistentExceptionWrapper.new(ex)
+        r = nil
+        uri = URI(url)
+        post = Net::HTTP::Delete.new fix_path(uri.request_uri)
+        add_headers(post, req_hash, default_headers)
+        response = http.request uri, post
+        r = NetHttpPersistentResponseWrapper.new(response)
+        case response
+          when Net::HTTPClientError, Net::HTTPServerError
+            raise Rest::HttpError.new(r)
         end
-        response
+        r
       end
 
       def close

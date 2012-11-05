@@ -62,7 +62,13 @@ module Rest
         begin
           req_hash[:method] = :post
           req_hash[:url] = url
-          req_hash[:payload] = req_hash[:body] if req_hash[:body]
+          b = req_hash[:body]
+          if b
+            if b.is_a?(Hash)
+              b = b.to_json
+            end
+            req_hash[:payload] = b
+          end
           r2 = RestClient::Request.execute(req_hash)
           response = RestClientResponseWrapper.new(r2)
         rescue RestClient::Exception => ex

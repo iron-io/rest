@@ -63,8 +63,6 @@ module Rest
         r
       end
 
-
-
       def post(url, req_hash={})
         req_hash = default_typhoeus_options.merge(req_hash)
         to_json_parts(req_hash)
