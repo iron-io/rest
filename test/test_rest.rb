@@ -107,22 +107,30 @@ class TestRest < TestBase
   def test_post_with_headers
 
     @token = "abctoken"
+    oauth = "OAuth #{@token}"
     headers = {
         'Content-Type' => 'application/json',
-        'Authorization' => "OAuth #{@token}",
+        'Authorization' => oauth,
         'User-Agent' => "someagent"
     }
+    key = "rest-gem-post"
     body = {"foo" => "bar"}
-    response = @rest.post("#{bin}",
+    response = @rest.post("http://rest-test.iron.io/code/200?store=#{key}",
                           :body => body,
                           :headers => headers)
     p response
+    response = @rest.get("http://rest-test.iron.io/stored/#{key}")
+    parsed = JSON.parse(response.body)
+    p parsed
+    assert_equal body, JSON.parse(parsed['body'])
+    assert_equal oauth, parsed['headers']['Authorization'.upcase]
+
     response = @rest.post("http://rest-test.iron.io/code/200",
                           :body => body,
                           :headers => headers)
     p response
 
-    response = @rest.post("#{bin}",
+    response = @rest.post("http://rest-test.iron.io/code/200?store=#{key}",
                           :body => "some string body",
                           :headers => headers)
     p response
