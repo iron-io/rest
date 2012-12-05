@@ -169,6 +169,7 @@ module Rest
         uri = URI(url)
         post = Net::HTTP::Delete.new fix_path(uri.request_uri)
         add_headers(post, req_hash, default_headers)
+        post.body = stringed_body(req_hash[:body]) if req_hash[:body]
         response = http.request uri, post
         r = NetHttpPersistentResponseWrapper.new(response)
         case response

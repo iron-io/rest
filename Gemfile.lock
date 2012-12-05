@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rest (2.0.4)
+    rest (2.1.0)
       net-http-persistent
       rest-client (>= 0.3.0)
 
@@ -12,7 +12,7 @@ GEM
     ffi (1.1.5)
     mime-types (1.19)
     minitest (3.5.0)
-    net-http-persistent (2.7)
+    net-http-persistent (2.8)
     quicky (0.1.1)
     rake (0.9.2.2)
     rest-client (1.6.7)
