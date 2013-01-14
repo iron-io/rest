@@ -36,10 +36,10 @@ module Rest
       def default_typhoeus_options
         req_hash = {}
         # todo: should change this timeout to longer if it's for posting file
-        req_hash[:connect_timeout] = 5000
+        req_hash[:connecttimeout] = 5000
         req_hash[:timeout] = 10000
-        req_hash[:follow_location] = true
-        req_hash[:max_redirects] = 2
+        req_hash[:followlocation] = true
+        req_hash[:maxredirs] = 2
         req_hash
       end
 

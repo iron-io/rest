@@ -1,3 +1,8 @@
+if RUBY_VERSION.split('.')[1].to_i == 8
+  require 'rubygems'
+  gem 'json'
+end
+
 require 'json'
 require 'logger'
 
@@ -5,11 +10,11 @@ require 'logger'
 # The purpose of this is so that users who can't install binaries easily (like windoze users)
 # can have fallbacks that work.
 
-require_relative 'errors'
+require 'rest/errors'
 
 module Rest
 
-  require_relative 'wrappers/base_wrapper'
+  require 'rest/wrappers/base_wrapper'
 
   def self.logger=(logger)
     @logger = logger
@@ -39,15 +44,15 @@ module Rest
       end
 
       if @gem == :excon
-        require_relative 'wrappers/excon_wrapper'
+        require 'rest/wrappers/excon_wrapper'
         @wrapper = Rest::Wrappers::ExconWrapper.new(self)
         @logger.debug "Using excon gem."
       elsif @gem == :typhoeus
-        require_relative 'wrappers/typhoeus_wrapper'
+        require 'rest/wrappers/typhoeus_wrapper'
         @wrapper = Rest::Wrappers::TyphoeusWrapper.new
         @logger.debug "Using typhoeus gem."
       elsif @gem == :net_http_persistent
-        require_relative 'wrappers/net_http_persistent_wrapper'
+        require 'rest/wrappers/net_http_persistent_wrapper'
         @wrapper = Rest::Wrappers::NetHttpPersistentWrapper.new(self)
         @logger.debug "Using net-http-persistent gem."
       else
@@ -129,7 +134,7 @@ module Rest
 
             pow = (4 ** (current_retry)) * 100 # milliseconds
                                                #puts 'pow=' + pow.to_s
-            s = Random.rand * pow
+            s = rand * pow
                                                #puts 's=' + s.to_s
             sleep_secs = 1.0 * s / 1000.0
                                                #puts 'sleep for ' + sleep_secs.to_s

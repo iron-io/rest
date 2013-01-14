@@ -1,7 +1,6 @@
-gem 'test-unit'
 require 'test/unit'
 require 'yaml'
-require_relative 'test_base'
+require 'test_base'
 
 class TestTemp < TestBase
   def setup
@@ -11,7 +10,7 @@ class TestTemp < TestBase
 
 
   def test_form_post
-    r = @rest.post("http://google.com/search", :params=>{q: "Rick Astley"})
+    r = @rest.post("http://google.com/search", :params=>{:q => "Rick Astley"})
     p r
   end
 

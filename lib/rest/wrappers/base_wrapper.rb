@@ -53,4 +53,5 @@ module Rest
 end
 
 # we need it for post_file, ok as gem already depends on it
-require_relative 'rest_client_wrapper'
+require 'rest/wrappers/rest_client_wrapper'
+

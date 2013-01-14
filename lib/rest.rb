@@ -1,1 +1,1 @@
-require_relative 'rest/client'
+require 'rest/client'
