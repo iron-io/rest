@@ -1,9 +1,8 @@
 # Put config.yml file in ~/Dropbox/configs/ironmq_gem/test/config.yml
 
-gem 'test-unit'
 require 'test/unit'
 require 'yaml'
-require_relative 'test_base'
+require 'test_base'
 
 class TestRest < TestBase
   def setup
@@ -17,11 +16,11 @@ class TestRest < TestBase
     p response.code
     assert response.code == 200
     p response.body
-    assert response.body.include?("Social Coding")
+    assert response.body.include?("Explore GitHub")
   end
 
   def test_backoff
-    response = @rest.get("http://rest-test.iron.io/code/503?switch_after=3&switch_to=200")
+    response = @rest.get("http://rest-test.iron.io/code/503?switch_after=2&switch_to=200")
     p response
     p response.code
     assert response.tries == 3
@@ -159,7 +158,7 @@ class TestRest < TestBase
   end
 
   def test_form_post
-    r = @rest.post("http://google.com/search", :params=>{q: "Rick Astley"})
+    r = @rest.post("http://google.com/search", :params=>{:q => "Rick Astley"})
     p r
   end
 

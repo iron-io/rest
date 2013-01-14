@@ -1,4 +1,3 @@
-gem 'test-unit'
 require 'test/unit'
 require 'yaml'
 begin
@@ -14,6 +13,9 @@ class TestBase < Test::Unit::TestCase
     puts 'setup'
     @rest = Rest::Client.new(:gem => :net_http_persistent, :log_level=>Logger::DEBUG)
 
+  end
+
+  def test_fake
   end
 
   ALL_OPS = [:get, :put, :post, :delete]
