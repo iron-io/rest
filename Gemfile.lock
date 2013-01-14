@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rest (2.1.0)
+    rest (2.1.1)
       net-http-persistent
       rest-client (>= 0.3.0)
 

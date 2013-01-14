@@ -80,14 +80,7 @@ module Rest
           #p uri.request_uri
           #puts "query: " + uri.query.inspect
           #puts "fragment: " + uri.fragment.inspect
-          if req_hash[:params]
-            new_q = URI.encode_www_form(req_hash[:params])
-            if uri.query
-              new_q = uri.query + "&" + new_q
-            end
-            #puts "new_q: " + new_q
-            uri.query = new_q
-          end
+          append_query_params(req_hash, uri)
           #p uri.request_uri
           post = Net::HTTP::Get.new fix_path(uri.request_uri)
           add_headers(post, req_hash, default_headers)
@@ -120,6 +113,17 @@ module Rest
         r
       end
 
+      def append_query_params(req_hash, uri)
+        if req_hash[:params]
+          new_q = URI.encode_www_form(req_hash[:params])
+          if uri.query
+            new_q = uri.query + "&" + new_q
+          end
+          #puts "new_q: " + new_q
+          uri.query = new_q
+        end
+      end
+
       def fix_path(path)
         return "/" if path.nil? || path == ""
         path
@@ -129,9 +133,12 @@ module Rest
       def post(url, req_hash={})
         r = nil
         uri = URI(url)
+        append_query_params(req_hash, uri)
         post = Net::HTTP::Post.new fix_path(uri.request_uri)
         add_headers(post, req_hash, default_headers)
         post.body = stringed_body(req_hash[:body]) if req_hash[:body]
+        post.set_form_data req_hash[:form_data] if req_hash[:form_data]
+        Rest.logger.debug "POST request to #{uri}. body: #{post.body}"
         response = http.request uri, post
         r = NetHttpPersistentResponseWrapper.new(response)
         case response
@@ -152,6 +159,7 @@ module Rest
       def put(url, req_hash={})
         r = nil
         uri = URI(url)
+        append_query_params(req_hash, uri)
         post = Net::HTTP::Put.new fix_path(uri.request_uri)
         add_headers(post, req_hash, default_headers)
         post.body = stringed_body(req_hash[:body]) if req_hash[:body]
@@ -167,6 +175,7 @@ module Rest
       def delete(url, req_hash={})
         r = nil
         uri = URI(url)
+        append_query_params(req_hash, uri)
         post = Net::HTTP::Delete.new fix_path(uri.request_uri)
         add_headers(post, req_hash, default_headers)
         post.body = stringed_body(req_hash[:body]) if req_hash[:body]

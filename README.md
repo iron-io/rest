@@ -60,7 +60,8 @@ POST
 options:
 
 - :body => POST body
-- :headers => headers
+- :headers => headers hash
+- :form_data => hash of fields/values, sent form encoded (only tested with default net-http-persistent)
 
 PUT
 ------
