@@ -40,6 +40,7 @@ module Rest
         req_hash[:timeout] = 10000
         req_hash[:followlocation] = true
         req_hash[:maxredirs] = 3
+        req_hash[:accept_encoding] = 'gzip'
         req_hash
       end
 
