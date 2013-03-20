@@ -34,7 +34,7 @@ module Rest
       @options = options
       # todo: initialize this as module variable above
       @logger = Logger.new(STDOUT)
-      @logger.level = Logger::INFO
+      @logger.level = options[:log_level] || Logger::INFO
       Rest.logger = @logger
 
       @gem = options[:gem] if options[:gem]
@@ -44,15 +44,15 @@ module Rest
       end
 
       if @gem == :excon
-        require 'rest/wrappers/excon_wrapper'
+        require File.expand_path('wrappers/excon_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::ExconWrapper.new(self)
         @logger.debug "Using excon gem."
       elsif @gem == :typhoeus
-        require 'rest/wrappers/typhoeus_wrapper'
+        require File.expand_path('wrappers/typhoeus_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::TyphoeusWrapper.new
         @logger.debug "Using typhoeus gem."
       elsif @gem == :net_http_persistent
-        require 'rest/wrappers/net_http_persistent_wrapper'
+        require File.expand_path('wrappers/net_http_persistent_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::NetHttpPersistentWrapper.new(self)
         @logger.debug "Using net-http-persistent gem."
       else
@@ -64,7 +64,6 @@ module Rest
 
     def choose_best_gem
       begin
-        raise LoadError
         require 'typhoeus'
         @gem = :typhoeus
       rescue LoadError => ex
@@ -73,6 +72,7 @@ module Rest
           require 'net/http/persistent'
           @gem = :net_http_persistent
         rescue LoadError => ex
+          raise ex
         end
       end
       if @gem.nil?
@@ -97,13 +97,14 @@ module Rest
       max_retries = options[:max_retries] || 5
       max_follows = options[:max_follows] || 10
       if options[:follow_count] && options[:follow_count] >= max_follows
-        raise Rest::RestError "Too many follows. #{options[:follow_count]}"
+        raise Rest::RestError, "Too many follows. #{options[:follow_count]}"
       end
       current_retry = 0
       current_follow = 0
       success = false
       tries = 0
       res = nil
+      #  todo: typhoeus does retries in the library so it shouldn't do retries here. And we should use the max_retries here as a parameter to typhoeus
       while current_retry < max_retries && current_follow < max_follows do
         tries += 1
         begin

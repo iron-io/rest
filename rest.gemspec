@@ -17,13 +17,13 @@ Gem::Specification.new do |gem|
   gem.required_rubygems_version = ">= 1.3.6"
   gem.required_ruby_version = Gem::Requirement.new(">= 1.8")
   gem.add_runtime_dependency "rest-client", ">= 0.3.0"
-  gem.add_runtime_dependency "net-http-persistent"
+  gem.add_runtime_dependency "typhoeus", ">= 0.5.4"
 
+  gem.add_development_dependency "net-http-persistent"
   gem.add_development_dependency "test-unit"
   gem.add_development_dependency "minitest"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "uber_config"
-  gem.add_development_dependency "typhoeus", ">= 0.5.4"
   gem.add_development_dependency "quicky", ">= 0.4.0"
   gem.add_development_dependency "excon"
 

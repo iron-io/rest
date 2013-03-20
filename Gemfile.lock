@@ -2,27 +2,27 @@ PATH
   remote: .
   specs:
     rest (2.2.0)
-      net-http-persistent
       rest-client (>= 0.3.0)
+      typhoeus (>= 0.5.4)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    ethon (0.5.7)
-      ffi (~> 1.2.0)
+    ethon (0.5.10)
+      ffi (~> 1.3.0)
       mime-types (~> 1.18)
-    excon (0.16.10)
-    ffi (1.2.1)
-    mime-types (1.19)
-    minitest (4.4.0)
+    excon (0.20.0)
+    ffi (1.3.1)
+    mime-types (1.21)
+    minitest (4.6.2)
     net-http-persistent (2.8)
     quicky (0.4.0)
     rake (10.0.3)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    test-unit (2.5.3)
-    typhoeus (0.5.4)
-      ethon (~> 0.5.7)
+    test-unit (2.5.4)
+    typhoeus (0.6.2)
+      ethon (~> 0.5.10)
     uber_config (1.0.5)
 
 PLATFORMS
@@ -31,9 +31,9 @@ PLATFORMS
 DEPENDENCIES
   excon
   minitest
+  net-http-persistent
   quicky (>= 0.4.0)
   rake
   rest!
   test-unit
-  typhoeus (>= 0.5.4)
   uber_config

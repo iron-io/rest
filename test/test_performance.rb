@@ -1,8 +1,7 @@
 require 'test/unit'
 require 'yaml'
 require 'quicky'
-
-require 'test_base'
+require File.expand_path('test_base', File.dirname(__FILE__))
 
 class TestPerformance < TestBase
   def setup
@@ -13,11 +12,11 @@ class TestPerformance < TestBase
   def test_get_performance
     puts 'test_get_performance'
 
-    times = 20
+    times = 100
 
     quicky = Quicky::Timer.new
 
-    to_run = [:typhoeus, :rest_client, :net_http_persistent, :excon]
+    to_run = [:typhoeus, :rest_client, :net_http_persistent]
     to_run.each do |gem|
       run_perf(quicky, times, gem)
     end

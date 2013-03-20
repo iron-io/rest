@@ -11,7 +11,7 @@ class TestBase < Test::Unit::TestCase
 
   def setup
     puts 'setup'
-    @rest = Rest::Client.new(:gem => :net_http_persistent, :log_level=>Logger::DEBUG)
+    @rest = Rest::Client.new(:gem => :typhoeus, :log_level=>Logger::DEBUG)
 
   end
 

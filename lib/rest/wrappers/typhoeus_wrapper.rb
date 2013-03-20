@@ -39,7 +39,7 @@ module Rest
         req_hash[:connecttimeout] = 5000
         req_hash[:timeout] = 10000
         req_hash[:followlocation] = true
-        req_hash[:maxredirs] = 2
+        req_hash[:maxredirs] = 3
         req_hash
       end
 
@@ -53,14 +53,17 @@ module Rest
       end
 
       def handle_response(response)
-        if response.timed_out?
-          raise TyphoeusTimeoutError.new(response)
-        end
         r = TyphoeusResponseWrapper.new(response)
-        if response.code >= 400
+        if response.success?
+          return r
+        elsif response.timed_out?
+          raise TyphoeusTimeoutError.new(response)
+        elsif response.code == 0
+          # Could not get an http response, something's wrong.
+          raise Rest::RestError.new("Could not get a response. Curl error 0.")
+        else
           raise Rest::HttpError.new(r)
         end
-        r
       end
 
       def post(url, req_hash={})

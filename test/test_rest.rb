@@ -2,7 +2,7 @@
 
 require 'test/unit'
 require 'yaml'
-require 'test_base'
+require File.expand_path('test_base', File.dirname(__FILE__))
 
 class TestRest < TestBase
   def setup
@@ -158,7 +158,7 @@ class TestRest < TestBase
   end
 
   def test_form_post
-    r = @rest.post("http://google.com/search", :params=>{:q => "Rick Astley"})
+    r = @rest.post("http://rest-test.iron.io/code/200", :params=>{:q => "Rick Astley"})
     p r
   end
 
@@ -172,6 +172,13 @@ class TestRest < TestBase
 
     puts res.body
     assert res.body.include?("items")
+  end
+
+  def test_bad_host
+    puts "test bad host"
+    # OpenDNS, YOU SUCK!
+    r = @rest.get("http://something-that-is-not-here.com", :params=>{:q => "Rick Astley"})
+    p r
   end
 
 end

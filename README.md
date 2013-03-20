@@ -36,8 +36,8 @@ To choose a specific underlying http client lib:
 
 Supported http libraries are:
 
-* rest-client
-* net-http-persistent
+* rest_client
+* net_http_persistent
 * typhoeus
 
 Then use it:
