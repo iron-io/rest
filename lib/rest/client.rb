@@ -57,7 +57,8 @@ module Rest
         @logger.debug "Using net-http-persistent gem."
       else
         @wrapper = Rest::Wrappers::RestClientWrapper.new
-        hint = (options[:gem] ? "" : " Please install 'typhoeus' or net-http-persistent gem for best performance.")
+        hint = (options[:gem] ? "" : " NOTICE: Please install 'typhoeus' gem for optimal performance.")
+        puts hint
         @logger.debug "Using rest-client gem.#{hint}"
       end
     end

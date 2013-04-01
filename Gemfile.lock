@@ -3,7 +3,6 @@ PATH
   specs:
     rest (2.5.0)
       rest-client (>= 0.3.0)
-      typhoeus (>= 0.5.4)
 
 GEM
   remote: https://rubygems.org/
@@ -36,4 +35,5 @@ DEPENDENCIES
   rake
   rest!
   test-unit
+  typhoeus (>= 0.5.4)
   uber_config
