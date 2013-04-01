@@ -6,7 +6,7 @@ module Rest
 
     class TyphoeusTimeoutError < Rest::TimeoutError
       def initialize(response)
-        msg ||= "HTTP Request Timed out. Curl code: #{response.curl_return_code}. Curl error msg: #{response.curl_error_message}."
+        msg ||= "HTTP Request Timed out. Curl code: #{response.return_code}. Curl error msg: #{response.return_message}."
         super(msg)
       end
     end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rest (2.2.0)
+    rest (2.5.0)
       rest-client (>= 0.3.0)
       typhoeus (>= 0.5.4)
 
