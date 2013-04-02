@@ -16,12 +16,35 @@ module Rest
 
   require 'rest/wrappers/base_wrapper'
 
+  @@logger = Logger.new(STDOUT)
+
   def self.logger=(logger)
-    @logger = logger
+    @@logger = logger
   end
 
   def self.logger()
-    @logger
+    @@logger
+  end
+
+
+  class BackingGem
+    attr_accessor :name, :gem_name
+
+    def initialize(name, gem_name)
+      @name = name
+      @gem_name = gem_name
+    end
+
+  end
+
+  # setup metadata about backing gem options
+  @@backing_gems = {}
+  @@backing_gems[:typhoeus] = BackingGem.new(:typhoeus, 'typhoeus')
+  @@backing_gems[:rest_client] = BackingGem.new(:rest_client, 'rest_client')
+  @@backing_gems[:net_http_persistent] = BackingGem.new(:net_http_persistent, 'net/http/persistent')
+
+  def self.backing_gems
+    @@backing_gems
   end
 
   class Client
@@ -32,10 +55,8 @@ module Rest
     #
     def initialize(options={})
       @options = options
-      # todo: initialize this as module variable above
-      @logger = Logger.new(STDOUT)
-      @logger.level = options[:log_level] || Logger::INFO
-      Rest.logger = @logger
+
+      @logger = Rest.logger
 
       @gem = options[:gem] if options[:gem]
 
@@ -57,28 +78,36 @@ module Rest
         @logger.debug "Using net-http-persistent gem."
       else
         @wrapper = Rest::Wrappers::RestClientWrapper.new
-        hint = (options[:gem] ? "" : " NOTICE: Please install 'typhoeus' gem for optimal performance.")
+        hint = (options[:gem] ? "" : "NOTICE: Please install 'typhoeus' gem or upgrade to Ruby 2.X for optimal performance.")
         puts hint
-        @logger.debug "Using rest-client gem.#{hint}"
+        @logger.debug "Using rest-client gem. #{hint}"
       end
     end
 
     def choose_best_gem
-      begin
-        require 'typhoeus'
-        @gem = :typhoeus
-      rescue LoadError => ex
-        begin
-          # try net-http-persistent
-          require 'net/http/persistent'
-          @gem = :net_http_persistent
-        rescue LoadError => ex
-          raise ex
-        end
+      gems_to_try = []
+      #puts "Ruby MAJOR: #{Rest.ruby_major}"
+      if Rest.ruby_major >= 2
+        gems_to_try << :net_http_persistent
+        gems_to_try << :typhoeus
+        gems_to_try << :rest_client
+      else
+        # net-http-persistent has issues with ssl and keep-alive connections on ruby < 1.9.3p327
+        gems_to_try << :typhoeus
+        gems_to_try << :rest_client
       end
-      if @gem.nil?
-        require 'rest_client'
-        @gem = :rest_client
+      gems_to_try.each_with_index do |g, i|
+        bg = Rest.backing_gems[g]
+        begin
+          require bg.gem_name
+          @gem = bg.name
+          return @gem
+        rescue LoadError => ex
+          if (i+1) >= gems_to_try.length
+            raise ex
+          end
+          @logger.debug "LoadError on #{bg.name}, trying #{Rest.backing_gems[gems_to_try[i+1]].name}..."
+        end
       end
     end
 
