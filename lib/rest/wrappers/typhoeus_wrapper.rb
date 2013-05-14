@@ -63,7 +63,7 @@ module Rest
           # Could not get an http response, something's wrong.
           raise Rest::RestError.new("Could not get a response. Curl error 0.")
         else
-          raise Rest::HttpError.new(r)
+          raise Rest::HttpError.new(r, r.code)
         end
       end
 

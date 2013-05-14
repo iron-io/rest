@@ -7,16 +7,14 @@ module Rest
   end
 
   class HttpError < RestError
-    def initialize(response)
-      super("#{response.code} Error")
-      @response = response
-    end
+    attr_reader :response, :code
+    attr_accessor :options
 
-    def response
-      @response
-    end
-    def code
-      response.code
+    def initialize(response, code, options={})
+      super("#{code} Error")
+      @response = response
+      @code = code
+      @options = options
     end
 
     def to_s

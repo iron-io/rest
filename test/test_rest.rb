@@ -16,7 +16,7 @@ class TestRest < TestBase
     p response.code
     assert response.code == 200
     p response.body
-    assert response.body.include?("Explore GitHub")
+    assert response.body.include?("Explore")
   end
 
   def test_backoff
@@ -69,7 +69,7 @@ class TestRest < TestBase
         assert ex.is_a?(Rest::HttpError)
         assert ex.response
         assert ex.response.body
-        assert ex.code == 404
+        assert_equal 404, ex.code
         assert ex.response.body.include?("404")
         assert ex.to_s.include?("404")
       end

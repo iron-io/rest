@@ -7,7 +7,7 @@ module Rest
       attr_reader :ex
 
       def initialize(ex)
-        super(ex.response)
+        super(ex.response, ex.http_code)
         @ex = ex
       end
     end

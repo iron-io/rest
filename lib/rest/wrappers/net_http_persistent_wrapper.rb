@@ -93,7 +93,7 @@ module Rest
           r = NetHttpPersistentResponseWrapper.new(response)
           case response
             when Net::HTTPClientError, Net::HTTPServerError
-              raise Rest::HttpError.new(r)
+              raise Rest::HttpError.new(r, r.code.to_i)
           end
           #  when Net::HTTPRedirection
           #    @client.logger.debug "moved to #{response['location']}"
@@ -143,7 +143,7 @@ module Rest
         r = NetHttpPersistentResponseWrapper.new(response)
         case response
           when Net::HTTPClientError, Net::HTTPServerError
-            raise Rest::HttpError.new(r)
+            raise Rest::HttpError.new(r, r.code.to_i)
         end
         r
       end
@@ -167,7 +167,7 @@ module Rest
         r = NetHttpPersistentResponseWrapper.new(response)
         case response
           when Net::HTTPClientError, Net::HTTPServerError
-            raise Rest::HttpError.new(r)
+            raise Rest::HttpError.new(r, r.code.to_i)
         end
         r
       end
@@ -183,7 +183,7 @@ module Rest
         r = NetHttpPersistentResponseWrapper.new(response)
         case response
           when Net::HTTPClientError, Net::HTTPServerError
-            raise Rest::HttpError.new(r)
+            raise Rest::HttpError.new(r, r.code.to_i)
         end
         r
       end

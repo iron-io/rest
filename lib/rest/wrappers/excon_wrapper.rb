@@ -63,7 +63,7 @@ module Rest
         r2 = conn.request(req_hash)
         response = ExconResponseWrapper.new(r2)
         if response.code >= 400
-          raise HttpError.new(response)
+          raise HttpError.new(response, response.code)
         end
         response
       end
@@ -76,7 +76,7 @@ module Rest
           to_json_parts(req_hash)
           response = excon_request(url, req_hash)
         rescue RestClient::Exception => ex
-          raise HttpError.new(ex)
+          raise HttpError.new(ex.response, ex.http_code)
         end
         response
       end
