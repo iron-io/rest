@@ -18,7 +18,7 @@ module Rest
     end
 
     def to_s
-      "HTTP #{code} Error. #{response.body}"
+      "HTTP #{code} Error."
     end
   end
 
