@@ -17,6 +17,7 @@ module Rest
   require 'rest/wrappers/base_wrapper'
 
   @@logger = Logger.new(STDOUT)
+  @@logger.level = Logger::INFO
 
   def self.logger=(logger)
     @@logger = logger
