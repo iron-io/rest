@@ -16,10 +16,16 @@ module Rest
 
         if response.header['content-encoding'].eql?('gzip')
           Rest.logger.debug 'GZIPPED'
-          sio = StringIO.new(response.body)
-          gz = Zlib::GzipReader.new(sio)
-          page = gz.read()
-          @body = page
+
+          if response.body
+            sio = StringIO.new(response.body)
+            gz = Zlib::GzipReader.new(sio)
+            page = gz.read()
+            @body = page
+          else
+            @body = nil
+          end
+
         end
       end
 
