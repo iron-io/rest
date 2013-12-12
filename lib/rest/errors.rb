@@ -7,18 +7,30 @@ module Rest
   end
 
   class HttpError < RestError
-    attr_reader :response, :code
+    attr_reader :response, :code, :msg
     attr_accessor :options
 
     def initialize(response, code, options={})
       super("#{code} Error")
       @response = response
+      if response && response.body 
+        begin
+          bodyparsed = JSON.parse(response.body)
+          @msg = bodyparsed["msg"]
+        rescue => ex
+          # ignore
+        end  
+      end
       @code = code
       @options = options
     end
 
     def to_s
-      "HTTP #{code} Error."
+      s = "HTTP #{code} Error"
+      if @msg
+        s += ": #{@msg}"
+      end
+      s
     end
   end
 
