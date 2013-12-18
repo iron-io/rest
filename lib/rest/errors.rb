@@ -7,8 +7,8 @@ module Rest
   end
 
   class HttpError < RestError
-    attr_reader :response, :code, :msg
-    attr_accessor :options
+    attr_reader :response, :code
+    attr_accessor :options, :msg
 
     def initialize(response, code, options={})
       super("#{code} Error")
