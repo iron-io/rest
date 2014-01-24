@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
 
   gem.required_rubygems_version = ">= 1.3.6"
   gem.required_ruby_version = Gem::Requirement.new(">= 1.8")
-  gem.add_runtime_dependency "rest-client", ">= 0.3.0"
+  gem.add_runtime_dependency "rest_client", ">= 1.7.1"
   gem.add_runtime_dependency "net-http-persistent"
 
   gem.add_development_dependency "typhoeus", ">= 0.5.4"

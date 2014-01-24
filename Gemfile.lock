@@ -1,29 +1,30 @@
 PATH
   remote: .
   specs:
-    rest (2.6.2)
+    rest (2.7.0)
       net-http-persistent
-      rest-client (>= 0.3.0)
+      rest_client (>= 1.7.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    ethon (0.5.12)
+    ethon (0.6.2)
       ffi (>= 1.3.0)
       mime-types (~> 1.18)
-    excon (0.21.0)
-    ffi (1.8.1)
-    mime-types (1.23)
-    minitest (5.0.0)
-    net-http-persistent (2.8)
+    excon (0.31.0)
+    ffi (1.9.3)
+    mime-types (1.25.1)
+    minitest (5.2.1)
+    net-http-persistent (2.9)
+    netrc (0.7.7)
     quicky (0.4.0)
-    rake (10.0.4)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
-    test-unit (2.5.4)
-    typhoeus (0.6.3)
-      ethon (~> 0.5.11)
-    uber_config (1.0.5)
+    rake (10.1.1)
+    rest_client (1.7.2)
+      netrc (~> 0.7.7)
+    test-unit (2.5.5)
+    typhoeus (0.6.7)
+      ethon (~> 0.6.2)
+    uber_config (1.1.0)
 
 PLATFORMS
   ruby
