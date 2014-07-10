@@ -178,6 +178,22 @@ module Rest
         r
       end
 
+      def patch(url, req_hash={})
+        r = nil
+        uri = URI(url)
+        append_query_params(req_hash, uri)
+        post = Net::HTTP::Patch.new fix_path(uri.request_uri)
+        add_headers(post, req_hash, default_headers)
+        post.body = stringed_body(req_hash[:body]) if req_hash[:body]
+        response = http.request uri, post
+        r = NetHttpPersistentResponseWrapper.new(response)
+        case response
+          when Net::HTTPClientError, Net::HTTPServerError
+            raise Rest::HttpError.new(r, r.code.to_i)
+        end
+        r
+      end
+
       def delete(url, req_hash={})
         r = nil
         uri = URI(url)

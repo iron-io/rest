@@ -83,6 +83,14 @@ module Rest
         response
       end
 
+      def patch(url, req_hash={})
+        req_hash = default_typhoeus_options.merge(req_hash)
+        # puts "REQ_HASH=" + req_hash.inspect
+        response = Typhoeus::Request.patch(url, req_hash)
+        response = handle_response(response)
+        response
+      end
+
       def delete(url, req_hash={})
         req_hash = default_typhoeus_options.merge(req_hash)
         response = Typhoeus::Request.delete(url, req_hash)
