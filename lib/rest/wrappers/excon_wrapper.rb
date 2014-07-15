@@ -93,6 +93,18 @@ module Rest
         response
       end
 
+      def patch(url, req_hash={})
+        response = nil
+        begin
+          req_hash[:method] = :patch
+          req_hash[:url] = url
+          response = excon_request(url, req_hash)
+        rescue RestClient::Exception => ex
+          raise RestClientExceptionWrapper.new(ex)
+        end
+        response
+      end
+
       def delete(url, req_hash={})
         response = nil
         begin

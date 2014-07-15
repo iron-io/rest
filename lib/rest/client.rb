@@ -205,6 +205,14 @@ module Rest
       return res
     end
 
+    def patch(url, req_hash={})
+      res = nil
+      res = perform_op(:patch, req_hash) do
+        res = @wrapper.patch(url, req_hash)
+      end
+      return res
+    end
+
     def delete(url, req_hash={})
       res = nil
       res = perform_op(:delete, req_hash) do
