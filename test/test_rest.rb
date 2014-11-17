@@ -134,7 +134,7 @@ class TestRest < TestBase
     parsed = JSON.parse(response.body)
     p parsed
     assert_equal body, JSON.parse(parsed['body'])
-    assert_equal oauth, parsed['headers']['Authorization'.upcase]
+    assert_equal oauth, parsed['headers']['Authorization']
 
     body2 = "hello world"
     response = @rest.post("http://rest-test.iron.io/code/200?store=#{key}",
@@ -170,15 +170,17 @@ class TestRest < TestBase
 
     res = rest.get(url, options)
 
-    puts res.body
+    # puts res.body
     assert res.body.include?("items")
   end
 
   def test_bad_host
     puts "test bad host"
     # OpenDNS, YOU SUCK!
-    r = @rest.get("http://something-that-is-not-here.com", :params=>{:q => "Rick Astley"})
-    p r
+    assert_raise SocketError do
+      r = @rest.get("http://something-that-is-not-here.com", :params=>{:q => "Rick Astley"})
+      p r
+    end
   end
 
 end

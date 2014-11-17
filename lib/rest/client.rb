@@ -43,6 +43,7 @@ module Rest
   @@backing_gems[:typhoeus] = BackingGem.new(:typhoeus, 'typhoeus')
   @@backing_gems[:rest_client] = BackingGem.new(:rest_client, 'rest_client')
   @@backing_gems[:net_http_persistent] = BackingGem.new(:net_http_persistent, 'net/http/persistent')
+  @@backing_gems[:internal] = BackingGem.new(:internal, 'internal_client')
 
   def self.backing_gems
     @@backing_gems
@@ -77,11 +78,16 @@ module Rest
         require File.expand_path('wrappers/net_http_persistent_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::NetHttpPersistentWrapper.new(self)
         @logger.debug "Using net-http-persistent gem."
-      else
+      elsif @gem == :rest_client
+        require File.expand_path('wrappers/rest_client_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::RestClientWrapper.new
         hint = (options[:gem] ? "" : "NOTICE: Please install 'typhoeus' gem or upgrade to Ruby 2.X for optimal performance.")
         puts hint
         @logger.debug "Using rest-client gem. #{hint}"
+      else # use internal client
+        require File.expand_path('wrappers/internal_client_wrapper', File.dirname(__FILE__))
+        @wrapper = Rest::Wrappers::InternalClientWrapper.new
+        @logger.debug "Using rest internal client. #{hint}"
       end
     end
 
@@ -92,10 +98,12 @@ module Rest
         gems_to_try << :net_http_persistent
         gems_to_try << :typhoeus
         gems_to_try << :rest_client
+        gems_to_try << :internal
       else
         # net-http-persistent has issues with ssl and keep-alive connections on ruby < 1.9.3p327
         gems_to_try << :typhoeus
         gems_to_try << :rest_client
+        gems_to_try << :internal
       end
       gems_to_try.each_with_index do |g, i|
         bg = Rest.backing_gems[g]
@@ -165,11 +173,11 @@ module Rest
             raise ex if current_retry == max_retries - 1
 
             pow = (4 ** (current_retry)) * 100 # milliseconds
-                                               #puts 'pow=' + pow.to_s
+            #puts 'pow=' + pow.to_s
             s = rand * pow
-                                               #puts 's=' + s.to_s
+            #puts 's=' + s.to_s
             sleep_secs = 1.0 * s / 1000.0
-                                               #puts 'sleep for ' + sleep_secs.to_s
+            #puts 'sleep for ' + sleep_secs.to_s
             current_retry += 1
             @logger.debug "#{ex.code} Received. Retrying #{current_retry} out of #{max_retries} max in #{sleep_secs} seconds."
             sleep sleep_secs

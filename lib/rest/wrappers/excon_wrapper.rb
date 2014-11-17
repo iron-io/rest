@@ -51,7 +51,7 @@ module Rest
           req_hash[:query] = req_hash[:params] if req_hash[:params]
           #p req_hash
           response = excon_request(url, req_hash)
-        rescue RestClient::Exception => ex
+        rescue Rest::RestClient::Exception => ex
           #p ex
           raise ExconExceptionWrapper.new(ex)
         end
@@ -75,7 +75,7 @@ module Rest
           req_hash[:url] = url
           to_json_parts(req_hash)
           response = excon_request(url, req_hash)
-        rescue RestClient::Exception => ex
+        rescue Rest::RestClient::Exception => ex
           raise HttpError.new(ex.response, ex.http_code)
         end
         response
@@ -87,7 +87,7 @@ module Rest
           req_hash[:method] = :put
           req_hash[:url] = url
           response = excon_request(url, req_hash)
-        rescue RestClient::Exception => ex
+        rescue Rest::RestClient::Exception => ex
           raise RestClientExceptionWrapper.new(ex)
         end
         response
@@ -111,7 +111,7 @@ module Rest
           req_hash[:method] = :delete
           req_hash[:url] = url
           response = excon_request(url, req_hash)
-        rescue RestClient::Exception => ex
+        rescue Rest::RestClient::Exception => ex
           raise RestClientExceptionWrapper.new(ex)
         end
         response

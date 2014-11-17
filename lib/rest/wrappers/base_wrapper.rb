@@ -1,3 +1,6 @@
+# we need client for post_file
+require_relative 'internal_client_wrapper'
+
 module Rest
   class BaseWrapper
 
@@ -15,10 +18,10 @@ module Rest
           req_hash.delete(:headers)
         end
 
-        r2 = RestClient.post(url, req_hash, headers)
-        response = Rest::Wrappers::RestClientResponseWrapper.new(r2)
-      rescue RestClient::Exception => ex
-        raise Rest::Wrappers::RestClientExceptionWrapper.new(ex)
+        r2 = Rest::InternalClient.post(url, req_hash, headers)
+        response = Rest::Wrappers::InternalClientResponseWrapper.new(r2)
+      rescue Rest::InternalClient::Exception => ex
+        raise Rest::Wrappers::InternalClientExceptionWrapper.new(ex)
       end
       response
     end
@@ -40,7 +43,7 @@ module Rest
     # Provide a headers_orig method in your wrapper to allow this to work
     def headers
       new_h = {}
-      headers_orig.each_pair do |k,v|
+      headers_orig.each_pair do |k, v|
         if v.is_a?(Array) && v.size == 1
           v = v[0]
         end
@@ -51,7 +54,3 @@ module Rest
 
   end
 end
-
-# we need it for post_file, ok as gem already depends on it
-require 'rest/wrappers/rest_client_wrapper'
-

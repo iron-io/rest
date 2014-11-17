@@ -16,6 +16,7 @@ Features
 * Chooses best client you have installed on your system based on what we have found performs the best.
   * Currently net_http_persistent and typhoeus are nearly the same, but since net_http_persistent doesn't have a binary
     dependency, it wins.
+  * You can run performance tests yourself by running: `ruby test/test_performance.rb`, quite a difference between the libs.
 * Handles 503 errors with exponential backoff.
 
 
@@ -39,6 +40,7 @@ Supported http libraries are:
 * rest_client
 * net_http_persistent
 * typhoeus
+* internal - this gem's built in client.
 
 Then use it:
 

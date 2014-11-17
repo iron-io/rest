@@ -16,7 +16,7 @@ class TestPerformance < TestBase
 
     quicky = Quicky::Timer.new
 
-    to_run = [:typhoeus, :rest_client, :net_http_persistent]
+    to_run = [:typhoeus, :rest_client, :net_http_persistent, :internal]
     to_run.each do |gem|
       run_perf(quicky, times, gem)
     end
