@@ -14,8 +14,6 @@ require 'rest/errors'
 
 module Rest
 
-  require 'rest/wrappers/base_wrapper'
-
   @@logger = Logger.new(STDOUT)
   @@logger.level = Logger::INFO
 

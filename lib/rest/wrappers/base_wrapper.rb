@@ -1,5 +1,4 @@
 # we need client for post_file
-require_relative 'internal_client_wrapper'
 
 module Rest
   class BaseWrapper

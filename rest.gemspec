@@ -1,4 +1,6 @@
-require File.expand_path('../lib/rest/version', __FILE__)
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'rest/version'
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Travis Reeder"]
@@ -25,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "uber_config"
   gem.add_development_dependency "quicky", ">= 0.4.0"
   gem.add_development_dependency "excon"
+  gem.add_development_dependency "netrc"
 
 end
 
