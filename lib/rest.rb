@@ -13,4 +13,6 @@ if Rest.ruby_major == 1 && Rest.ruby_minor == 8
   gem 'json'
 end
 
-require File.expand_path('rest/client', File.dirname(__FILE__))
+require 'rest/errors'
+require 'rest/wrappers/base_wrapper'
+require 'rest/client'
