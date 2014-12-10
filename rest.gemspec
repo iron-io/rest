@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.required_rubygems_version = ">= 1.3.6"
   gem.required_ruby_version = Gem::Requirement.new(">= 1.8")
   gem.add_runtime_dependency "net-http-persistent", ">= 2.9.1"
+  gem.add_runtime_dependency "netrc"
 
   gem.add_development_dependency "typhoeus", ">= 0.5.4"
   gem.add_development_dependency "test-unit"
@@ -27,7 +28,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "uber_config"
   gem.add_development_dependency "quicky", ">= 0.4.0"
   gem.add_development_dependency "excon"
-  gem.add_development_dependency "netrc"
 
 end
 

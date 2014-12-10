@@ -1,8 +1,9 @@
 PATH
   remote: .
   specs:
-    rest (3.0.0)
+    rest (3.0.1)
       net-http-persistent (>= 2.9.1)
+      netrc
 
 GEM
   remote: https://rubygems.org/
@@ -29,7 +30,6 @@ PLATFORMS
 DEPENDENCIES
   excon
   minitest
-  netrc
   quicky (>= 0.4.0)
   rake
   rest!
