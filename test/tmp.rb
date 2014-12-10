@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'yaml'
-require 'test_base'
+require_relative 'test_base'
 
 class TestTemp < TestBase
   def setup
@@ -9,8 +9,8 @@ class TestTemp < TestBase
   end
 
 
-  def test_form_post
-    r = @rest.post("http://google.com/search", :params=>{:q => "Rick Astley"})
+  def test_post_file
+    r = @rest.post_file("http://httpbin.org/post", :params=>{:q => "Rick Astley"})
     p r
   end
 

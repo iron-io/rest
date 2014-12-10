@@ -158,7 +158,7 @@ class TestRest < TestBase
   end
 
   def test_form_post
-    r = @rest.post("http://rest-test.iron.io/code/200", :params=>{:q => "Rick Astley"})
+    r = @rest.post("http://rest-test.iron.io/code/200", :params => {:q => "Rick Astley"})
     p r
   end
 
@@ -178,10 +178,14 @@ class TestRest < TestBase
     puts "test bad host"
     # OpenDNS, YOU SUCK!
     assert_raise SocketError do
-      r = @rest.get("http://something-that-is-not-here.com", :params=>{:q => "Rick Astley"})
+      r = @rest.get("http://something-that-is-not-here.com", :params => {:q => "Rick Astley"})
       p r
     end
   end
 
+  def test_post_file
+    r = @rest.post_file("http://httpbin.org/post", :params => {:q => "Rick Astley"})
+    p r
+  end
 end
 

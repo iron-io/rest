@@ -15,4 +15,5 @@ end
 
 require 'rest/errors'
 require 'rest/wrappers/base_wrapper'
+require 'rest/wrappers/internal_client_wrapper'
 require 'rest/client'

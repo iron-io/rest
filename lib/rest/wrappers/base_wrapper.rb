@@ -1,5 +1,4 @@
-# we need client for post_file
-
+# we need InternalClient client for post_file
 module Rest
   class BaseWrapper
 
