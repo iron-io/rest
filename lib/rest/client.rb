@@ -82,10 +82,12 @@ module Rest
         hint = (options[:gem] ? "" : "NOTICE: Please install 'typhoeus' gem or upgrade to Ruby 2.X for optimal performance.")
         puts hint
         @logger.debug "Using rest-client gem. #{hint}"
+        RestClient.proxy = options[:http_proxy] if options[:http_proxy]
       else # use internal client
         require File.expand_path('wrappers/internal_client_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::InternalClientWrapper.new
         @logger.debug "Using rest internal client. #{hint}"
+        InternalClient.proxy = options[:http_proxy] if options[:http_proxy]
       end
     end
 
