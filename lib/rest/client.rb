@@ -50,6 +50,7 @@ module Rest
   class Client
 
     attr_accessor :options, :logger, :gem
+    attr_reader :wrapper
     # options:
     # - :gem => specify gem explicitly
     #
@@ -70,7 +71,7 @@ module Rest
         @logger.debug "Using excon gem."
       elsif @gem == :typhoeus
         require File.expand_path('wrappers/typhoeus_wrapper', File.dirname(__FILE__))
-        @wrapper = Rest::Wrappers::TyphoeusWrapper.new
+        @wrapper = Rest::Wrappers::TyphoeusWrapper.new(self)
         @logger.debug "Using typhoeus gem."
       elsif @gem == :net_http_persistent
         require File.expand_path('wrappers/net_http_persistent_wrapper', File.dirname(__FILE__))

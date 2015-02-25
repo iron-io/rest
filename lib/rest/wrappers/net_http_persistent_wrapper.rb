@@ -54,7 +54,8 @@ module Rest
 
       def initialize(client)
         @client = client
-        @http = Net::HTTP::Persistent.new 'rest_gem'
+        @http = Net::HTTP::Persistent.new('rest_gem')
+        @http.proxy = URI(@client.options[:http_proxy]) if @client.options[:http_proxy]
         @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
 

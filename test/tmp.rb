@@ -8,7 +8,6 @@ class TestTemp < TestBase
 
   end
 
-
   def test_post_file
     r = @rest.post_file("http://httpbin.org/post", :params=>{:q => "Rick Astley"})
     p r
