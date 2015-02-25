@@ -106,7 +106,7 @@ module Rest
       gems_to_try.each_with_index do |g, i|
         bg = Rest.backing_gems[g]
         begin
-          require bg.gem_name
+          require bg.gem_name unless g == :internal
           @gem = bg.name
           return @gem
         rescue LoadError => ex
