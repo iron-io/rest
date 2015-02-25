@@ -33,6 +33,10 @@ module Rest
 
     class TyphoeusWrapper < BaseWrapper
 
+      def initialize(client)
+        @client = client
+      end
+
       def default_typhoeus_options
         req_hash = {}
         # todo: should change this timeout to longer if it's for posting file
@@ -46,6 +50,7 @@ module Rest
 
       def get(url, req_hash={})
         req_hash = default_typhoeus_options.merge(req_hash)
+        req_hash[:proxy] = @client.options[:http_proxy] if @client.options[:http_proxy]
         # puts "REQ_HASH=" + req_hash.inspect
         response = Typhoeus::Request.get(url, req_hash)
         #p response

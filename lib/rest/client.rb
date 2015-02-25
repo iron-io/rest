@@ -50,6 +50,7 @@ module Rest
   class Client
 
     attr_accessor :options, :logger, :gem
+    attr_reader :wrapper
     # options:
     # - :gem => specify gem explicitly
     #
@@ -70,7 +71,7 @@ module Rest
         @logger.debug "Using excon gem."
       elsif @gem == :typhoeus
         require File.expand_path('wrappers/typhoeus_wrapper', File.dirname(__FILE__))
-        @wrapper = Rest::Wrappers::TyphoeusWrapper.new
+        @wrapper = Rest::Wrappers::TyphoeusWrapper.new(self)
         @logger.debug "Using typhoeus gem."
       elsif @gem == :net_http_persistent
         require File.expand_path('wrappers/net_http_persistent_wrapper', File.dirname(__FILE__))
@@ -82,10 +83,12 @@ module Rest
         hint = (options[:gem] ? "" : "NOTICE: Please install 'typhoeus' gem or upgrade to Ruby 2.X for optimal performance.")
         puts hint
         @logger.debug "Using rest-client gem. #{hint}"
+        RestClient.proxy = options[:http_proxy] if options[:http_proxy]
       else # use internal client
         require File.expand_path('wrappers/internal_client_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::InternalClientWrapper.new
         @logger.debug "Using rest internal client. #{hint}"
+        InternalClient.proxy = options[:http_proxy] if options[:http_proxy]
       end
     end
 
