@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     rest (3.0.3)
+      net-http-persistent (>= 2.9.1)
       netrc
 
 GEM
@@ -12,6 +13,7 @@ GEM
     excon (0.44.3)
     ffi (1.9.6)
     minitest (5.5.1)
+    net-http-persistent (2.9.4)
     netrc (0.10.3)
     power_assert (0.2.2)
     quicky (0.4.0)
