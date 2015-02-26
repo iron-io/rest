@@ -85,11 +85,11 @@ module Rest
         @logger.debug "Using rest-client gem. #{hint}"
         RestClient.proxy = options[:http_proxy] if options[:http_proxy]
       else # use internal client
-        require File.expand_path('wrappers/internal_client_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::InternalClientWrapper.new
         @logger.debug "Using rest internal client. #{hint}"
-        InternalClient.proxy = options[:http_proxy] if options[:http_proxy]
       end
+      # Always set this because of the shared post_file in base_wrapper
+      InternalClient.proxy = options[:http_proxy] if options[:http_proxy]
     end
 
     def choose_best_gem
