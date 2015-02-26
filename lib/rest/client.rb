@@ -80,7 +80,7 @@ module Rest
       elsif @gem == :rest_client
         require File.expand_path('wrappers/rest_client_wrapper', File.dirname(__FILE__))
         @wrapper = Rest::Wrappers::RestClientWrapper.new
-        hint = (options[:gem] ? "" : "NOTICE: Please install 'typhoeus' gem or upgrade to Ruby 2.X for optimal performance.")
+        hint = (options[:gem] ? "" : "NOTICE: Please upgrade to Ruby 2.X for optimal performance.")
         puts hint
         @logger.debug "Using rest-client gem. #{hint}"
         RestClient.proxy = options[:http_proxy] if options[:http_proxy]

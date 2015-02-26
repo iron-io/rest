@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rest (3.0.3)
+    rest (3.0.5)
       net-http-persistent (>= 2.9.1)
       netrc
 
