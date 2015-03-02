@@ -15,5 +15,6 @@ end
 
 require 'rest/errors'
 require 'rest/wrappers/base_wrapper'
+binding.pry
 require 'rest/wrappers/internal_client_wrapper'
 require 'rest/client'

@@ -1,4 +1,4 @@
-require_relative 'internal_client/internal_client'
+require 'internal_client/internal_client.rb'
 
 module Rest
 
