@@ -11,6 +11,7 @@ end
 if Rest.ruby_major == 1 && Rest.ruby_minor == 8
   require 'rubygems'
   gem 'json'
+  gem 'pry'
 end
 
 require 'rest/errors'
