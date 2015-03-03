@@ -21,8 +21,6 @@ if Rest.ruby_major == 1 && Rest.ruby_minor == 8
   gem 'json'
 end
 
-require "pry"
-
 require 'rest/errors'
 require 'rest/wrappers/base_wrapper'
 require 'rest/wrappers/internal_client_wrapper'
