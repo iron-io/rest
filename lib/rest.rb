@@ -7,15 +7,23 @@ module Rest
   end
 end
 
+unless Kernel.respond_to?(:require_relative)
+  module Kernel
+    p "using require relative shim"
+    def require_relative(path)
+      require File.join(File.dirname(caller[0]), path.to_str)
+    end
+  end
+end
 # 1.8 support
 if Rest.ruby_major == 1 && Rest.ruby_minor == 8
   require 'rubygems'
   gem 'json'
-  gem 'pry'
 end
+
+require "pry"
 
 require 'rest/errors'
 require 'rest/wrappers/base_wrapper'
-binding.pry
 require 'rest/wrappers/internal_client_wrapper'
 require 'rest/client'
