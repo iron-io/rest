@@ -23,13 +23,13 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'pry', '= 0.9'
 
 
-  gem.add_development_dependency "typhoeus", ">= 0.5.4"
-  gem.add_development_dependency "test-unit"
-  gem.add_development_dependency "minitest"
-  gem.add_development_dependency "rake"
-  gem.add_development_dependency "uber_config"
-  gem.add_development_dependency "quicky", ">= 0.4.0"
-  gem.add_development_dependency "excon"
+  # gem.add_development_dependency "typhoeus", ">= 0.5.4"
+  # gem.add_development_dependency "test-unit"
+  # gem.add_development_dependency "minitest"
+  # gem.add_development_dependency "rake"
+  # gem.add_development_dependency "uber_config"
+  # gem.add_development_dependency "quicky", ">= 0.4.0"
+  # gem.add_development_dependency "excon"
 
 end
 
