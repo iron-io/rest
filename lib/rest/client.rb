@@ -59,7 +59,7 @@ module Rest
 
       @logger = Rest.logger
 
-      @gem = options[:gem] if options[:gem]
+      @gem = options[:gem]
 
       if @gem.nil?
         choose_best_gem()
