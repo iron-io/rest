@@ -1,28 +1,28 @@
 PATH
   remote: .
   specs:
-    rest (3.0.5)
-      net-http-persistent (>= 2.9.1)
+    rest (3.0.7)
+      net-http-persistent (>= 2.9.1, < 3)
       netrc
 
 GEM
   remote: https://rubygems.org/
   specs:
-    ethon (0.7.3)
+    ethon (0.9.1)
       ffi (>= 1.3.0)
-    excon (0.44.3)
-    ffi (1.9.6)
-    minitest (5.5.1)
+    excon (0.53.0)
+    ffi (1.9.14)
+    minitest (5.9.1)
     net-http-persistent (2.9.4)
-    netrc (0.10.3)
-    power_assert (0.2.2)
+    netrc (0.11.0)
+    power_assert (0.3.1)
     quicky (0.4.0)
-    rake (10.4.2)
-    test-unit (3.0.9)
+    rake (11.3.0)
+    test-unit (3.2.1)
       power_assert
-    typhoeus (0.7.1)
-      ethon (>= 0.7.1)
-    uber_config (1.1.1)
+    typhoeus (1.1.0)
+      ethon (>= 0.9.0)
+    uber_config (1.1.3)
 
 PLATFORMS
   ruby
@@ -36,3 +36,6 @@ DEPENDENCIES
   test-unit
   typhoeus (>= 0.5.4)
   uber_config
+
+BUNDLED WITH
+   1.12.5
